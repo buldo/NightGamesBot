@@ -1,20 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Ngb.Web.Data;
-using Ngb.Web.Models;
-using Ngb.Web.Services;
-
-namespace Ngb.Web
+﻿namespace Ngb.Web
 {
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
+
+    using Newtonsoft.Json;
+
+    using Ngb.Web.Data;
+    using Ngb.Web.Helpers;
+    using Ngb.Web.Models;
+    using Ngb.Web.Services;
+
     public class Startup
     {
         public Startup(IHostingEnvironment env)
@@ -22,12 +22,20 @@ namespace Ngb.Web
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                .AddEnvironmentVariables();
 
             if (env.IsDevelopment())
             {
                 // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
-                builder.AddUserSecrets();
+                try
+                {
+                    builder.AddUserSecrets();
+                }
+                catch (System.Exception)
+                {
+                    // Ничего страшного, если не нашли. Может быть отлаживаемся на сервера
+                }
             }
 
             builder.AddEnvironmentVariables();
@@ -39,9 +47,31 @@ namespace Ngb.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Add framework services.
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            string connectionString;
+            string herokuDatabaseUrl = Configuration["DATABASE_URL"];
+            if (string.IsNullOrWhiteSpace(herokuDatabaseUrl))
+            {
+                var receiveDataString = Configuration["RECEIVE_DATA"];
+                if (string.IsNullOrWhiteSpace(receiveDataString))
+                {
+                    // Мы в локальной среде
+                    connectionString = Configuration.GetConnectionString("DefaultConnection");
+                }
+                else
+                {
+                    // Мы в процессе сборки на хероку
+                    dynamic receiveData = JsonConvert.DeserializeObject(receiveDataString);
+                    connectionString = receiveData.push_metadata.env.DefaultConnection + "SSL Mode=Require;Trust Server Certificate=true;Pooling=false;";
+                }
+            }
+            else
+            {
+                // По простому получили все данные и работаем
+                connectionString = DbHelpers.DatabaseUrlToPostgreConnectionString(herokuDatabaseUrl);
+
+            }
+
+            services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()

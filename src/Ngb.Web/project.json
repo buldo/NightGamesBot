@@ -1,4 +1,4 @@
-﻿{
+{
   "userSecretsId": "aspnet-Ngb.Web-51d64f23-babe-4be4-b57a-43a54134bed9",
 
   "dependencies": {
@@ -42,7 +42,11 @@
     "Microsoft.VisualStudio.Web.CodeGenerators.Mvc": {
       "version": "1.0.0-preview2-final",
       "type": "build"
-    }
+    },
+    "BundlerMinifier.Core": "2.2.281",
+    "StyleCop.Analyzers": "1.0.0",
+    "Npgsql.EntityFrameworkCore.PostgreSQL": "1.0.1",
+    "Microsoft.Extensions.Configuration.CommandLine": "1.0.0"
   },
 
   "tools": {
