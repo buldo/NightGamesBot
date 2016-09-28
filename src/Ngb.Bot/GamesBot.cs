@@ -41,5 +41,10 @@ namespace Ngb.Bot
         {
             await ProcessUpdateAsync(updateEventArgs.Update);
         }
+
+        public void EnableWebHook(string url)
+        {
+            _client.SetWebhookAsync(url);
+        }
     }
 }

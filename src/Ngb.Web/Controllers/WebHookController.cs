@@ -27,7 +27,7 @@ namespace Ngb.Web.Controllers
         public void Post([FromBody]string value)
         {
             _logger.LogTrace("Update received");
-            await _messagesProcessor.ProcessUpdateRequestAsync(value);
+            //await _messagesProcessor.ProcessUpdateRequestAsync(value);
         }
     }
 }

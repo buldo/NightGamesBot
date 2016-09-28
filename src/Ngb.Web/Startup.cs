@@ -40,7 +40,7 @@
                 }
             }
 
-            builder.AddEnvironmentVariables();
+            
             Configuration = builder.Build();
         }
 
@@ -70,7 +70,6 @@
             {
                 // По простому получили все данные и работаем
                 connectionString = DbHelpers.DatabaseUrlToPostgreConnectionString(herokuDatabaseUrl);
-
             }
 
             services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));
@@ -85,8 +84,17 @@
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
 
-            var bot = new GamesBot("sdf");
+            var bot = new GamesBot(Configuration["Token"]);
+            if (bool.Parse(Configuration["IsPollingEnabled"]?? bool.FalseString))
+            {
+                bot.StartLongPooling();
+            }
+            else
+            {
+                bot.EnableWebHook(Configuration["HookUrl"]);
+            }
             services.AddSingleton<IUpdateMessagesProcessor>(bot);
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
