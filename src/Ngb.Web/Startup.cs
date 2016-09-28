@@ -1,5 +1,6 @@
 ﻿namespace Ngb.Web
 {
+    using Ngb.Bot;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -14,6 +15,7 @@
     using Ngb.Web.Helpers;
     using Ngb.Web.Models;
     using Ngb.Web.Services;
+
 
     public class Startup
     {
@@ -82,6 +84,9 @@
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
+
+            var bot = new GamesBot("sdf");
+            services.AddSingleton<IUpdateMessagesProcessor>(bot);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
