@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Ngb.FoxClient.TestApp": {
+      "commandName": "Project",
+      "commandLineArgs": "sgone 911112"
+    }
+  }
+}
