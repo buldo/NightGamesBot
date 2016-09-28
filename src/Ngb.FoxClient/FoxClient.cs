@@ -8,6 +8,9 @@ namespace Ngb.FoxClient
     using System.Net;
     using System.Net.Http;
 
+    using AngleSharp.Extensions;
+    using AngleSharp.Parser.Html;
+
     public class FoxClient
     {
         private readonly Authenticator _authenticator;
@@ -37,7 +40,22 @@ namespace Ngb.FoxClient
 
         public void Refresh()
         {
-            
+            var result = _httpClient.GetAsync("play/").Result;
+            if (_authenticator.IsAuthPageResponse(result))
+            {
+                _authenticator.Reauthenticate();
+                result = _httpClient.GetAsync("play/").Result;
+                if (_authenticator.IsAuthPageResponse(result))
+                {
+                    throw new Exception("Auth fail");
+                }
+            }
+
+            var parser = new HtmlParser();
+            var document = parser.Parse(result.Content.ReadAsStreamAsync().Result);
+            TeamName = document.GetElementsByClassName("team_name").FirstOrDefault()?.TextContent;
+
         }
+        
     }
 }

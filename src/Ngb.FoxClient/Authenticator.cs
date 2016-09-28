@@ -26,20 +26,31 @@
             _login = login;
             _password = password;
 
-            var responce = _httpClient.PostAsync(
+            Reauthenticate();
+        }
+
+        public void Reauthenticate()
+        {
+            var responseMessage = _httpClient.PostAsync(
                 LOGIN_PATH,
                 new FormUrlEncodedContent(
-                    new[] 
+                    new[]
                     {
-                        new KeyValuePair<string, string>("email", login),
-                        new KeyValuePair<string, string>("pass", password),
+                        new KeyValuePair<string, string>("email", _login),
+                        new KeyValuePair<string, string>("pass", _password),
                     })).Result;
-            if (responce.RequestMessage.RequestUri.LocalPath == LOGIN_PATH)
+            if (IsAuthPageResponse(responseMessage))
             {
                 throw new Exception("AuthError");
             }
-            
+
             IsAuthenticated = true;
+        }
+
+
+        public bool IsAuthPageResponse(HttpResponseMessage responseMessage)
+        {
+            return responseMessage.RequestMessage.RequestUri.LocalPath == LOGIN_PATH;
         }
     }
 }
