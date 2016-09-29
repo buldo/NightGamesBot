@@ -9,6 +9,8 @@ using Ngb.Bot;
 
 namespace Ngb.Web.Controllers
 {
+    using System.Net.Http;
+
     [Produces("application/json")]
     [Route("api/WebHook")]
     public class WebHookController : Controller
@@ -24,11 +26,12 @@ namespace Ngb.Web.Controllers
 
         // POST: api/WebHook
         [HttpPost]
-        public void Post(string value)
+        public async void Post(HttpRequestMessage request)
         {
             _logger.LogDebug("Update received");
-            _logger.LogDebug(value);
-            _messagesProcessor.ProcessUpdateRequestAsync(value);
+            var reqStr = await request.Content.ReadAsStringAsync();
+            _logger.LogDebug(reqStr);
+            _messagesProcessor.ProcessUpdateRequestAsync(reqStr);
         }
     }
 }
