@@ -26,12 +26,12 @@ namespace Ngb.Web.Controllers
 
         // POST: api/WebHook
         [HttpPost]
-        public async void Post(HttpRequestMessage request)
+        public async void Post(object request)
         {
             _logger.LogDebug("Update received");
-            var reqStr = await request.Content.ReadAsStringAsync();
-            _logger.LogDebug(reqStr);
-            _messagesProcessor.ProcessUpdateRequestAsync(reqStr);
+            //var reqStr = await request.Content.ReadAsStringAsync();
+            _logger.LogDebug(request.ToString());
+            //_messagesProcessor.ProcessUpdateRequestAsync(reqStr);
         }
     }
 }
