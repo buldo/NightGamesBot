@@ -24,7 +24,7 @@ namespace Ngb.Web.Controllers
 
         // POST: api/WebHook
         [HttpPost]
-        public void Post([FromBody]string value)
+        public void Post(string value)
         {
             _logger.LogDebug("Update received");
             _logger.LogDebug(value);

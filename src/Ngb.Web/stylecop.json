@@ -3,6 +3,10 @@
   "settings": {
     "documentationRules": {
 
+    },
+    "readabilityRules": {
+      ""
     }
+
   }
 }

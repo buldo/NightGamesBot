@@ -17,7 +17,6 @@
     },
     "Ngb.Web": {
       "commandName": "Project",
-      "commandLineArgs": "--pooling True",
       "launchBrowser": true,
       "launchUrl": "http://localhost:5000",
       "environmentVariables": {
