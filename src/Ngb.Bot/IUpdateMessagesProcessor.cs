@@ -1,7 +1,11 @@
 ﻿namespace Ngb.Bot
 {
+    using System.Threading.Tasks;
+
+    using Telegram.Bot.Types;
+
     public interface IUpdateMessagesProcessor
     {
-        void ProcessUpdateRequestAsync(string updateStrging);
+        Task ProcessUpdateAsync(Update update);
     }
 }

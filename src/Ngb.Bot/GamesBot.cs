@@ -25,14 +25,8 @@ namespace Ngb.Bot
             _client.OnUpdate += ClientOnOnUpdate;
             _client.StartReceiving();
         }
-
-        public async void ProcessUpdateRequestAsync(string updateStrging)
-        {
-            var update = JsonConvert.DeserializeObject<Update>(updateStrging);
-            await ProcessUpdateAsync(update);
-        }
-
-        private async Task ProcessUpdateAsync(Update update)
+        
+        public async Task ProcessUpdateAsync(Update update)
         {
             await _client.SendTextMessageAsync(update.Message.Chat.Id, "echo " + update.Message.Text);
         }
