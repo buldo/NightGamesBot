@@ -47,7 +47,8 @@
     "StyleCop.Analyzers": "1.0.0",
     "Npgsql.EntityFrameworkCore.PostgreSQL": "1.0.1",
     "Microsoft.Extensions.Configuration.CommandLine": "1.0.0",
-    "Ngb.Bot": "1.0.0"
+    "Ngb.Bot": "1.0.0",
+    "Telegram.Bot": "10.3.1"
   },
 
   "tools": {

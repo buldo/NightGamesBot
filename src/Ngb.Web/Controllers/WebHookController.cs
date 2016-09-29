@@ -11,6 +11,8 @@ namespace Ngb.Web.Controllers
 {
     using System.Net.Http;
 
+    using Telegram.Bot.Types;
+
     [Produces("application/json")]
     [Route("api/WebHook")]
     public class WebHookController : Controller
@@ -26,7 +28,7 @@ namespace Ngb.Web.Controllers
 
         // POST: api/WebHook
         [HttpPost]
-        public void Post([FromForm] string val)
+        public void Post(Update val)
         {
             _logger.LogDebug("Update received");
             _logger.LogDebug(val.ToString());
