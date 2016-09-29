@@ -1,0 +1,7 @@
+{
+  "profiles": {
+    "Ngb.FoxClient.TestApp": {
+      "commandName": "Project"
+    }
+  }
+}
