@@ -16,9 +16,9 @@ namespace Ngb.Web.Controllers
         private readonly ILogger _logger;
         private readonly IUpdateMessagesProcessor _messagesProcessor;
 
-        public WebHookController(ILogger logger, IUpdateMessagesProcessor messagesProcessor)
+        public WebHookController(ILoggerFactory loggerFactory, IUpdateMessagesProcessor messagesProcessor)
         {
-            _logger = logger;
+            _logger = loggerFactory.CreateLogger<WebHookController>();
             _messagesProcessor = messagesProcessor;
         }
 
