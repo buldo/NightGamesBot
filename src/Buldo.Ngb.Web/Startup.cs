@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Buldo.Ngb.Bot;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -10,8 +11,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Buldo.Ngb.Web.Data;
+using Buldo.Ngb.Web.Helpers;
 using Buldo.Ngb.Web.Models;
 using Buldo.Ngb.Web.Services;
+using Newtonsoft.Json;
 
 namespace Buldo.Ngb.Web
 {
@@ -22,12 +25,20 @@ namespace Buldo.Ngb.Web
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                .AddEnvironmentVariables();
 
             if (env.IsDevelopment())
             {
                 // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
-                builder.AddUserSecrets("aspnet-Buldo.Ngb.Web-88383069-de6a-448f-8beb-4f1aa5e0cd6d");
+                try
+                {
+                    builder.AddUserSecrets();
+                }
+                catch (System.Exception)
+                {
+                    // Ничего страшного, если не нашли. Может быть отлаживаемся на сервера
+                }
             }
 
             builder.AddEnvironmentVariables();
@@ -39,10 +50,31 @@ namespace Buldo.Ngb.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Add framework services.
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            string connectionString;
+            string herokuDatabaseUrl = Configuration["DATABASE_URL"];
+            if (string.IsNullOrWhiteSpace(herokuDatabaseUrl))
+            {
+                var receiveDataString = Configuration["RECEIVE_DATA"];
+                if (string.IsNullOrWhiteSpace(receiveDataString))
+                {
+                    // Мы в локальной среде
+                    connectionString = Configuration.GetConnectionString("DefaultConnection");
+                }
+                else
+                {
+                    // Мы в процессе сборки на хероку
+                    dynamic receiveData = JsonConvert.DeserializeObject(receiveDataString);
+                    connectionString = receiveData.push_metadata.env.DefaultConnection + "SSL Mode=Require;Trust Server Certificate=true;Pooling=false;";
+                }
+            }
+            else
+            {
+                // По простому получили все данные и работаем
+                connectionString = DbHelpers.DatabaseUrlToPostgreConnectionString(herokuDatabaseUrl);
+            }
 
+            services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));
+            
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
@@ -52,6 +84,17 @@ namespace Buldo.Ngb.Web
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
+
+            var bot = new GamesBot(Configuration["Token"]);
+            if (bool.Parse(Configuration["IsPollingEnabled"] ?? bool.FalseString))
+            {
+                bot.StartLongPooling();
+            }
+            else
+            {
+                bot.EnableWebHook(Configuration["HookUrl"]);
+            }
+            services.AddSingleton<IUpdateMessagesProcessor>(bot);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
