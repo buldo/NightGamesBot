@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Buldo.Ngb.Bot;
+using Buldo.Ngb.Web.BotInfrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -78,14 +79,19 @@ namespace Buldo.Ngb.Web
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
-
+            
             services.AddMvc();
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
 
-            var bot = new GamesBot(Configuration["Token"]);
+            var botConfig = new BotConfiguration()
+            {
+                Token = Configuration["Token"],
+                AccessKey = Configuration["AccessKey"]
+            };
+            var bot = new GamesBot(botConfig, new BotUsersRepository(() => CreateContext(connectionString)));
             if (bool.Parse(Configuration["IsPollingEnabled"] ?? bool.FalseString))
             {
                 bot.StartLongPooling();
@@ -126,6 +132,13 @@ namespace Buldo.Ngb.Web
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+        }
+
+        private ApplicationDbContext CreateContext(string connectionString)
+        {
+            var dbConBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+            dbConBuilder.UseNpgsql(connectionString);
+            return new ApplicationDbContext(dbConBuilder.Options);
         }
     }
 }

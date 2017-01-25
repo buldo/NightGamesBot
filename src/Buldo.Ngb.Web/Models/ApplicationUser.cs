@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Buldo.Ngb.Bot.UsersManagement;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Buldo.Ngb.Web.Models
