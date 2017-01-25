@@ -76,7 +76,10 @@ namespace Buldo.Ngb.Web
 
             services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));
             
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddIdentity<ApplicationUser, IdentityRole>(o =>
+                {
+                    o.Password.RequireNonAlphanumeric = false;
+                })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
             
