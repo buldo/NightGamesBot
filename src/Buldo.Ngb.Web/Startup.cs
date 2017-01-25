@@ -79,6 +79,7 @@ namespace Buldo.Ngb.Web
             services.AddIdentity<ApplicationUser, IdentityRole>(o =>
                 {
                     o.Password.RequireNonAlphanumeric = false;
+                    o.Password.RequiredLength = 5;
                 })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
