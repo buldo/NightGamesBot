@@ -5,17 +5,34 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Buldo.Ngb.Web.Data;
 
-namespace Buldo.Ngb.Web.Data.Migrations
+namespace Buldo.Ngb.Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20170124203503_BotUsers")]
-    partial class BotUsers
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
                 .HasAnnotation("ProductVersion", "1.1.0-rtm-22752");
+
+            modelBuilder.Entity("Buldo.Ngb.Bot.EnginesManagement.EngineInfo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Address");
+
+                    b.Property<string>("Login");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("Password");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Engines");
+                });
 
             modelBuilder.Entity("Buldo.Ngb.Bot.UsersManagement.BotUser", b =>
                 {
