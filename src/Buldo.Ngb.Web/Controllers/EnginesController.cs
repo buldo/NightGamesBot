@@ -1,44 +1,64 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Buldo.Ngb.Bot.EnginesManagement;
+using Buldo.Ngb.Web.Data;
+using Buldo.Ngb.Web.Models.EnginesViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+// For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Buldo.Ngb.Web.Controllers
 {
-    [Route("api/[controller]")]
+    [Authorize]
     public class EnginesController : Controller
     {
-        // GET: api/values
+        private readonly ApplicationDbContext _context;
+
+        public EnginesController(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
+        // GET: /<controller>/
         [HttpGet]
-        public IEnumerable<EngineInfo> Get()
+        public async Task<IActionResult> Index()
         {
-            return new EngineInfo[] { };
+            var viewModel = new EnginesListViewModel();
+            await _context.Engines.ForEachAsync(o => viewModel.Engines.Add(new EngineViewModel(o)));
+            
+            return View(viewModel);
         }
 
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/values
         [HttpPost]
-        public void Post([FromBody]EngineInfo value)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
         {
+            var toRem = _context.Engines.Find(id);
+            if (toRem != null)
+            {
+                _context.Engines.Remove(toRem);
+            }
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Index");
         }
 
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]EngineInfo value)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Add(
+            [FromForm]string name,
+            [FromForm]string address,
+            [FromForm]string login,
+            [FromForm]string password)
         {
+            var info = new EngineInfo {Address = address, Login = login, Name = name, Password = password};
+            _context.Engines.Add(info);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Index");
         }
 
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
     }
 }
