@@ -12,12 +12,12 @@ namespace Buldo.Ngb.Bot
     {
         private readonly TelegramBotClient _client;
         private readonly IUsersRepository _usersRepository;
-        private readonly BotConfiguration _configuration;
+        private readonly BotStartupConfiguration _startupConfiguration;
 
-        public GamesBot(BotConfiguration configuration, IUsersRepository usersRepository)
+        public GamesBot(BotStartupConfiguration startupConfiguration, IUsersRepository usersRepository)
         {
-            _configuration = configuration;
-            _client = new TelegramBotClient(_configuration.Token);
+            _startupConfiguration = startupConfiguration;
+            _client = new TelegramBotClient(_startupConfiguration.Token);
             _usersRepository = usersRepository;
         }
 
@@ -59,9 +59,9 @@ namespace Buldo.Ngb.Bot
             if (user == null)
             {
                 if (update.Message.Type == MessageType.TextMessage && 
-                    update.Message.Text == _configuration.AccessKey)
+                    update.Message.Text == _startupConfiguration.AccessKey)
                 {
-                    user = new BotUser() {TelegramId = update.Message.From.Id, IsActive = true };
+                    user = new BotUser {TelegramId = update.Message.From.Id, IsActive = true };
                     _usersRepository.AddUser(user);
                     await _client.SendTextMessageAsync(update.Message.Chat.Id, "Добро пожаловать");
                     return null;

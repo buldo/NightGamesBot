@@ -90,7 +90,7 @@ namespace Buldo.Ngb.Web
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
 
-            var botConfig = new BotConfiguration()
+            var botConfig = new BotStartupConfiguration()
             {
                 Token = Configuration["Token"],
                 AccessKey = Configuration["AccessKey"]
