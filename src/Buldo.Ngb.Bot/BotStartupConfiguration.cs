@@ -1,6 +1,6 @@
 ﻿namespace Buldo.Ngb.Bot
 {
-    public class BotConfiguration
+    public class BotStartupConfiguration
     {
         public string Token { get; set; }
 
