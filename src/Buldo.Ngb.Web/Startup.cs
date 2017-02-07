@@ -95,8 +95,8 @@ namespace Buldo.Ngb.Web
                 Token = Configuration["Token"],
                 AccessKey = Configuration["AccessKey"]
             };
-            var bot = new GamesBot(botConfig, new BotUsersRepository(() => CreateContext(connectionString)));
-            if (bool.Parse(Configuration["IsPollingEnabled"] ?? bool.FalseString))
+            var bot = new GamesBot(botConfig, new BotUsersRepository(() => CreateContext(connectionString)), new BotEnginesRepository(() => CreateContext(connectionString)));
+            if (bool.Parse(Configuration["IsPollingEnabled"] ?? bool.FalseString) || string.IsNullOrWhiteSpace(Configuration["HookUrl"]))
             {
                 bot.StartLongPooling();
             }

@@ -1,4 +1,6 @@
-﻿using Buldo.Ngb.Bot.UsersManagement;
+﻿using Buldo.Ngb.Bot.Controllers;
+using Buldo.Ngb.Bot.EnginesManagement;
+using Buldo.Ngb.Bot.UsersManagement;
 using Telegram.Bot.Types.Enums;
 
 namespace Buldo.Ngb.Bot
@@ -12,13 +14,19 @@ namespace Buldo.Ngb.Bot
     {
         private readonly TelegramBotClient _client;
         private readonly IUsersRepository _usersRepository;
+        private readonly IEnginesRepository _enginesRepository;
         private readonly BotStartupConfiguration _startupConfiguration;
+        private readonly Router _router = new Router();
 
-        public GamesBot(BotStartupConfiguration startupConfiguration, IUsersRepository usersRepository)
+        public GamesBot(BotStartupConfiguration startupConfiguration, IUsersRepository usersRepository, IEnginesRepository enginesRepository)
         {
             _startupConfiguration = startupConfiguration;
             _client = new TelegramBotClient(_startupConfiguration.Token);
             _usersRepository = usersRepository;
+            _enginesRepository = enginesRepository;
+
+            _router.MapRoute("engines", new SettingsController(enginesRepository));
+            _router.SetDefaultRoute(new EchoController());
         }
 
         public void StartLongPooling()
@@ -35,7 +43,7 @@ namespace Buldo.Ngb.Bot
                 return;
             }
 
-            await RealProcessAsync(update, user);
+            await _router.ProcessUpdate(update, user, _client);
         }
 
         private async void ClientOnOnUpdate(object sender, UpdateEventArgs updateEventArgs)
@@ -79,11 +87,5 @@ namespace Buldo.Ngb.Bot
 
             return user;
         }
-
-        private async Task RealProcessAsync(Update update, BotUser user)
-        {
-            await _client.SendTextMessageAsync(update.Message.Chat.Id, "echo " + update.Message.Text);
-        }
-
     }
 }
