@@ -1,4 +1,4 @@
-﻿namespace Buldo.Ngb.FoxClient
+﻿namespace Buldo.Ngb.FoxApi
 {
     using System;
     using System.Collections.Generic;

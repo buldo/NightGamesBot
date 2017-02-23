@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp1.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AngleSharp" Version="0.9.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="AngleSharp">
+      <HintPath>..\..\..\..\..\.nuget\packages\anglesharp\0.9.9\lib\netstandard1.0\AngleSharp.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

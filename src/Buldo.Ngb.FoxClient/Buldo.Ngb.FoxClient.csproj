@@ -3,6 +3,6 @@
     <TargetFramework>netcoreapp1.1</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="AngleSharp" Version="0.9.9" />
+    <ProjectReference Include="..\Buldo.Ngb.FoxApi\Buldo.Ngb.FoxApi.csproj" />
   </ItemGroup>
 </Project>
