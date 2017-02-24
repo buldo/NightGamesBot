@@ -1,6 +1,6 @@
 ﻿namespace Buldo.Ngb.FoxApi
 {
-    public class EnteredCode
+    public class AcceptedCode
     {
         public string Type { get; internal set; }
 

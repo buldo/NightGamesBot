@@ -3,7 +3,7 @@
     public enum InputResult
     {
         None,
-        CodeEntered,
+        CodeAccepted,
         CodeNotExists,
         CodeAlreadyEntered,
         SpoilerOpened

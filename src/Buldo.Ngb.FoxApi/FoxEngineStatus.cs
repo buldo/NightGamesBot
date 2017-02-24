@@ -14,6 +14,6 @@
 
         public Dictionary<string, int> BonusCodes { get; private set; } = new Dictionary<string, int>();
 
-        public List<EnteredCode> EnteredCodes { get; private set; } = new List<EnteredCode>();
+        public List<AcceptedCode> AcceptedCodes { get; private set; } = new List<AcceptedCode>();
     }
 }

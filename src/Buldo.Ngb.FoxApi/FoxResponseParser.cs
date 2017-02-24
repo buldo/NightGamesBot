@@ -22,17 +22,26 @@
 
         private void FillInputResult(FoxEngineStatus status, IHtmlDocument document)
         {
-            var message = document.GetElementById("message")?.TextContent;
+            var message = document.GetElementById("message")?.TextContent?.ToLower();
             if (string.IsNullOrWhiteSpace(message))
             {
                 status.InputResult = InputResult.None;
                 return;
             }
 
-            if (message.StartsWith("Код не существует."))
+            if (message.StartsWith("код не существует"))
             {
                 status.InputResult = InputResult.CodeNotExists;
+                return;
             }
+
+            if (message.StartsWith("код принят"))
+            {
+                status.InputResult = InputResult.CodeAccepted;
+                return;
+            }
+            
+
         }
 
         private void FillCodesOnLocation(Dictionary<string, int> codesToFill, string codesSection, IHtmlDocument document)
