@@ -10,6 +10,7 @@
     <EmbeddedResource Include="HtmlExamples\CodeNotExists.html" />
     <EmbeddedResource Include="HtmlExamples\CodeAccepted.html" />
     <EmbeddedResource Include="HtmlExamples\CodeAcceptedWithComment.html" />
+    <EmbeddedResource Include="HtmlExamples\CodeAlreadyAccepted.html" />
   </ItemGroup>
 
   <ItemGroup>

@@ -43,6 +43,12 @@
                 return;
             }
 
+            if (lowMessage.StartsWith("этот код уже был введен"))
+            {
+                status.InputResult = InputResult.CodeAlreadyAccepted;
+                return;
+            }
+
 
         }
 

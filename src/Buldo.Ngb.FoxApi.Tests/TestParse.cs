@@ -95,6 +95,21 @@ namespace Buldo.Ngb.FoxApi.Tests
             RealParseText(ExamplesPatches.CodeAcceptedWithComment, expected);
         }
 
+        [TestMethod]
+        public void TestCodeAlreadyAccepted()
+        {
+            var expected = new FoxEngineStatus
+            {
+                TeamName = "Рома",
+                InputResult = InputResult.CodeAlreadyAccepted
+            };
+
+            expected.MainCodes.Add("А+", 5);
+            expected.BonusCodes.Add("-2", 5);
+
+            RealParseText(ExamplesPatches.CodeAlreadyAccepted, expected);
+        }
+
         private void RealParseText(string examplePath, FoxEngineStatus expected)
         {
             using (var stream = GetResourceStream(examplePath))

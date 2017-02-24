@@ -1,0 +1,178 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0031)http://tomsk.redfoxkrsk.ru/play -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>62FX: В день Святого Валентина (Копия) - 1. Бар. - Игровой кабинет - RedFox Quest Томск</title>
+<meta name="description" content="">
+<meta name="keywords" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+    
+</head>
+
+<body>
+<p class="alert"><a href="http://tomsk.redfoxkrsk.ru/play/message/1487603377">Стоп-игра в 3:20. Брифинг в 3:35 на Изумрудке.</a></p>
+    <p class="team_name">Рома</p>
+    
+    <h1>62FX: В день Святого Валентина (Копия)</h1>
+    
+    <p class="timer"><span id="timer">20:10:05</span></p>
+    
+    <h2>1. Бар.</h2>
+        
+    <!-- insert here -->
+        <p id="message" class="clearfix neutral">Этот код уже был введен.</p>
+        
+        <form class="enter" action="http://tomsk.redfoxkrsk.ru/play/submit/" method="post">
+        <p>
+            <strong>Ввести код</strong>
+            <input type="text" class="input" id="code" name="code" value="" autocomplete="off">
+            <input type="submit" value="Отправить" class="btn_submit">
+        </p>
+    </form>
+        
+        <ul class="found_codes">
+                <li>
+            <span class="class">А+</span> 
+            <span class="code">4445 </span>
+            <!-- <span class="entered"></span> -->
+        </li>
+                <li>
+            <span class="class">А+</span> 
+            <span class="code">46781 Текст Комментария</span>
+            <!-- <span class="entered"></span> -->
+        </li>
+                <li>
+            <span class="class">А+</span> 
+            <span class="code">50575 </span>
+            <!-- <span class="entered"></span> -->
+        </li>
+            </ul>
+        
+        
+    <p class="task_text">
+        </p><p><span>Вот такая беда произошла с нашим Лисом. Сейчас он умотал в бар, на стене которого висит название:</span></p><br>
+<p><em>Она от матери упав,</em><br><em>Столкнулась с чьим-то вдруг умом.</em><br><em>И создалась ещё одна.</em></p><br>
+<p><span>Скорее догадываемся, что за бар, и едем выручать Лиса от депрессии.</span></p><br>
+<p><span>Ф.О.: СЛОВО</span></p>    <p></p>
+    
+        <div class="spoiler">
+    
+                
+            <p><img src="./Код уже был введён_files/red_fox.jpg" alt="" width="200" height="304"></p>
+<p>Текст Спойлера</p>
+<p><strong>Жирный спойлер</strong></p>        
+                
+    </div>
+    <div class="clear"></div>
+        
+    
+    <p class="level_time">
+                <strong>Осталось:</strong> <span id="time_left">00:50:12</span>
+        <br><strong>До подсказки 1:</strong> <span id="time_hint1">выдана</span>
+        <br><strong>До подсказки 2:</strong> <span id="time_hint2">выдана</span>
+    </p>
+        
+        <p class="codes_class"><strong>Коды на локации:</strong> 
+        </p><p><strong>Основные коды</strong>: , А+, А+, <span class="found">А+</span>, <span class="found">А+</span>, <span class="found">А+</span></p><p><strong>Бонусные коды</strong>: -2, -2, -2, -2, -2</p>    <p></p>
+        
+    <ul class="hints">
+        <li>
+                    <p><strong>Подсказка 1</strong></p>
+                    <p></p><p>А ещё в туалете бара можно найти другой текст:</p><br>
+<p><em>Она от ветки сорвалась,</em><br><em>Столкнулась с чьей-то головой,</em><br><em>Набила новую одну.</em></p><p></p>
+                </li><li>
+                    <p><strong>Подсказка 2</strong></p>
+                    <p></p><p>ШИШКА</p><p></p>
+                </li>    </ul>
+    
+        
+        <form action="http://tomsk.redfoxkrsk.ru/play/forfeit/" method="post"><input id="btn_forfeit" type="submit" value=" Слить оставшиеся коды "></form>
+        
+    
+    
+<script type="text/javascript" language="Javascript">
+
+var time_spent = 561000;
+var time_left  = 3039000;
+var time_started = 1487603377000 - time_spent;
+var time_reloaded = 1487603377000 - time_started;
+var hint1 = 60 * 2 * 1000;
+var hint2 = 60 * 3 * 1000;
+var reload_url = "http://tomsk.redfoxkrsk.ru/play/get_back/";
+
+window.onload = function(){
+    timer();
+    level_time();
+    document.getElementById('code').focus();
+}
+function timer() {
+    var time = new Date();
+    document.getElementById('timer').innerHTML = time.toLocaleTimeString();
+    setTimeout('timer()', 1000);
+}
+
+function level_time() {
+    // document.getElementById('time_spent').innerHTML = make_time(time_spent);
+    document.getElementById('time_left').innerHTML = make_time(time_left);
+    if((hint1 - time_spent) > 0) {
+        document.getElementById('time_hint1').innerHTML = make_time(hint1 - time_spent);
+    } else {
+        document.getElementById('time_hint1').innerHTML = 'выдана';
+    }
+        
+    if((hint2 - time_spent) > 0) {
+        document.getElementById('time_hint2').innerHTML = make_time(hint2 - time_spent);
+    } else {
+        document.getElementById('time_hint2').innerHTML = 'выдана';
+    }
+    time_spent += 1000;
+    time_left -= 1000;
+    setTimeout('level_time()', 1000);
+    
+    if(time_spent > 3600000) {
+        document.location = reload_url;
+    }
+    
+    if(time_spent > hint1 && time_reloaded < hint1) {
+        document.location = reload_url;
+    }
+    
+    if(time_spent > hint2 && time_reloaded < hint2) {
+        document.location = reload_url;
+    }
+}
+
+function make_time(time)
+{
+    var time = new Date(time);
+    
+    
+    var days = time.getUTCDate();
+    days--;
+    
+    var hours = time.getUTCHours();
+    if (hours < 10) { 
+        hours = "0" + hours; 
+    }
+    var mins = time.getUTCMinutes();
+    if (mins < 10) { 
+        mins = "0" + mins; 
+    }
+    var seconds = time.getUTCSeconds();
+    if (seconds < 10) { 
+        seconds = "0" + seconds; 
+    }
+    var str = hours + ":" + mins + ":" + seconds;
+    
+    if (days)
+    {
+        str = days + " д. " + str;
+    }
+    return str;
+}
+
+</script>
+
+
+
+</body></html>

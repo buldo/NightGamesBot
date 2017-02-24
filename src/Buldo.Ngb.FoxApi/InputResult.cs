@@ -5,7 +5,7 @@
         None,
         CodeAccepted,
         CodeNotExists,
-        CodeAlreadyEntered,
+        CodeAlreadyAccepted,
         SpoilerOpened
     }
 }
