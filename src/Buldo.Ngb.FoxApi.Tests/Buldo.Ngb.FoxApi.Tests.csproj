@@ -5,7 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="HtmlExamples\newTask.html" />
+    <EmbeddedResource Include="HtmlExamples\NewTask.html" />
+    <EmbeddedResource Include="HtmlExamples\NewTaskWithBonusCodes.html" />
   </ItemGroup>
 
   <ItemGroup>

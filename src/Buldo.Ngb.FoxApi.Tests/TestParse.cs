@@ -1,12 +1,9 @@
 namespace Buldo.Ngb.FoxApi.Tests
 {
-    using System.Collections.Generic;
     using System.IO;
     using System.Reflection;
-    using AngleSharp.Dom.Html;
     using AngleSharp.Parser.Html;
     using HtmlExamples;
-    using Microsoft.VisualStudio.TestPlatform.ObjectModel;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     [TestClass]
@@ -29,15 +26,29 @@ namespace Buldo.Ngb.FoxApi.Tests
                 TeamName = "SG-1",
             };
 
-            expected.CodesOnLocation.Add("2А",  3);
-            expected.CodesOnLocation.Add("2В+", 1);
-            expected.CodesOnLocation.Add("2А+", 5);
-            expected.CodesOnLocation.Add("1В",  1);
-            expected.CodesOnLocation.Add("1А",  1);
-            expected.CodesOnLocation.Add("1А+", 1);
+            expected.MainCodes.Add("2А",  3);
+            expected.MainCodes.Add("2В+", 1);
+            expected.MainCodes.Add("2А+", 5);
+            expected.MainCodes.Add("1В",  1);
+            expected.MainCodes.Add("1А",  1);
+            expected.MainCodes.Add("1А+", 1);
 
             RealParseText(ExamplesPatches.NewTask, expected);
         }
+
+        [TestMethod]
+        public void TestNewTaskWithBonusesParse()
+        {
+            var expected = new FoxEngineStatus
+            {
+                TeamName = "Рома",
+            };
+
+            expected.MainCodes.Add("А+", 5);
+
+            RealParseText(ExamplesPatches.NewTaskWithBonuses, expected);
+        }
+
 
         private void RealParseText(string examplePath, FoxEngineStatus expected)
         {
@@ -50,7 +61,7 @@ namespace Buldo.Ngb.FoxApi.Tests
                 Assert.AreEqual(expected.TeamName, actual.TeamName);
                 Assert.AreEqual(expected.InputResult, actual.InputResult);
                 Assert.AreEqual(expected.MessageText, actual.MessageText);
-                CollectionAssert.AreEquivalent(expected.CodesOnLocation,actual.CodesOnLocation);
+                CollectionAssert.AreEquivalent(expected.MainCodes,actual.MainCodes);
                 CollectionAssert.AreEquivalent(expected.EnteredCodes, expected.EnteredCodes);
             }
         }

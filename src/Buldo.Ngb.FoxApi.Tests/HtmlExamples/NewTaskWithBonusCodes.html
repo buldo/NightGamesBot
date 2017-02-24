@@ -1,0 +1,158 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0031)http://tomsk.redfoxkrsk.ru/play -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>62FX: В день Святого Валентина (Копия) - 1. Бар. - Игровой кабинет - RedFox Quest Томск</title>
+<meta name="description" content="">
+<meta name="keywords" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+</head>
+
+<body>
+<p class="alert"><a href="http://tomsk.redfoxkrsk.ru/play/message/1487602816">Стоп-игра в 3:20. Брифинг в 3:35 на Изумрудке.</a></p>
+    <p class="team_name">Рома</p>
+
+    <h1>62FX: В день Святого Валентина (Копия)</h1>
+
+    <p class="timer"><span id="timer">20:01:22</span></p>
+
+    <h2>1. Бар.</h2>
+
+    <!-- insert here -->
+
+        <form class="enter" action="http://tomsk.redfoxkrsk.ru/play/submit/" method="post">
+        <p>
+            <strong>Ввести код</strong>
+            <input type="text" class="input" id="code" name="code" value="" autocomplete="off">
+            <input type="submit" value="Отправить" class="btn_submit">
+        </p>
+    </form>
+
+
+
+    <p class="task_text">
+        </p><p><span>Вот такая беда произошла с нашим Лисом. Сейчас он умотал в бар, на стене которого висит название:</span></p><br>
+<p><em>Она от матери упав,</em><br><em>Столкнулась с чьим-то вдруг умом.</em><br><em>И создалась ещё одна.</em></p><br>
+<p><span>Скорее догадываемся, что за бар, и едем выручать Лиса от депрессии.</span></p><br>
+<p><span>Ф.О.: СЛОВО</span></p>    <p></p>
+
+        <div class="spoiler">
+
+                    <form method="post" action="http://tomsk.redfoxkrsk.ru/play/submitspoiler/">
+            <p>
+                Спойлер:
+                <input type="text" name="spoiler_code" value="">
+                <input type="submit" value="проверить">
+            </p>
+            </form>
+
+
+    </div>
+    <div class="clear"></div>
+
+
+    <p class="level_time">
+                <strong>Осталось:</strong> <span id="time_left">00:59:01</span>
+        <br><strong>До подсказки 1:</strong> <span id="time_hint1">00:19:01</span>
+        <br><strong>До подсказки 2:</strong> <span id="time_hint2">00:39:01</span>
+    </p>
+
+        <p class="codes_class"><strong>Коды на локации:</strong>
+        </p><p><strong>Основные коды</strong>: А+, А+, А+, А+, А+, </p><p><strong>Бонусные коды</strong>: -2, -2, -2, -2, -2</p>    <p></p>
+
+    <ul class="hints">
+            </ul>
+
+
+        <form action="http://tomsk.redfoxkrsk.ru/play/forfeit/" method="post"><input id="btn_forfeit" type="submit" value=" Слить оставшиеся коды "></form>
+
+
+
+<script type="text/javascript" language="Javascript">
+
+var time_spent = 0;
+var time_left  = 3600000;
+var time_started = 1487602816000 - time_spent;
+var time_reloaded = 1487602816000 - time_started;
+var hint1 = 60 * 20 * 1000;
+var hint2 = 60 * 40 * 1000;
+var reload_url = "http://tomsk.redfoxkrsk.ru/play/get_back/";
+
+window.onload = function(){
+    timer();
+    level_time();
+    document.getElementById('code').focus();
+}
+function timer() {
+    var time = new Date();
+    document.getElementById('timer').innerHTML = time.toLocaleTimeString();
+    setTimeout('timer()', 1000);
+}
+
+function level_time() {
+    // document.getElementById('time_spent').innerHTML = make_time(time_spent);
+    document.getElementById('time_left').innerHTML = make_time(time_left);
+    if((hint1 - time_spent) > 0) {
+        document.getElementById('time_hint1').innerHTML = make_time(hint1 - time_spent);
+    } else {
+        document.getElementById('time_hint1').innerHTML = 'выдана';
+    }
+
+    if((hint2 - time_spent) > 0) {
+        document.getElementById('time_hint2').innerHTML = make_time(hint2 - time_spent);
+    } else {
+        document.getElementById('time_hint2').innerHTML = 'выдана';
+    }
+    time_spent += 1000;
+    time_left -= 1000;
+    setTimeout('level_time()', 1000);
+
+    if(time_spent > 3600000) {
+        document.location = reload_url;
+    }
+
+    if(time_spent > hint1 && time_reloaded < hint1) {
+        document.location = reload_url;
+    }
+
+    if(time_spent > hint2 && time_reloaded < hint2) {
+        document.location = reload_url;
+    }
+}
+
+function make_time(time)
+{
+    var time = new Date(time);
+
+
+    var days = time.getUTCDate();
+    days--;
+
+    var hours = time.getUTCHours();
+    if (hours < 10) {
+        hours = "0" + hours;
+    }
+    var mins = time.getUTCMinutes();
+    if (mins < 10) {
+        mins = "0" + mins;
+    }
+    var seconds = time.getUTCSeconds();
+    if (seconds < 10) {
+        seconds = "0" + seconds;
+    }
+    var str = hours + ":" + mins + ":" + seconds;
+
+    if (days)
+    {
+        str = days + " д. " + str;
+    }
+    return str;
+}
+
+</script>
+
+
+
+</body></html>

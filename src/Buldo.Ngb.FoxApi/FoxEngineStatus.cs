@@ -10,7 +10,9 @@
 
         public string MessageText { get; internal set; }
 
-        public Dictionary<string, int> CodesOnLocation { get; private set; } = new Dictionary<string, int>();
+        public Dictionary<string, int> MainCodes { get; private set; } = new Dictionary<string, int>();
+
+        public Dictionary<string, int> BonusCodes { get; private set; } = new Dictionary<string, int>();
 
         public List<EnteredCode> EnteredCodes { get; private set; } = new List<EnteredCode>();
     }

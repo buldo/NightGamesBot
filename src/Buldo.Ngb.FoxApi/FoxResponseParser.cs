@@ -9,22 +9,21 @@
     {
         public FoxEngineStatus Parse(IHtmlDocument document)
         {
-            var strongTags = document.GetElementsByTagName("strong").FirstOrDefault(d => d.TextContent == "Основные коды");
             var status = new FoxEngineStatus
             {
                 TeamName = GetTeamName(document)
             };
 
-            FillCodesOnLocation(status, document);
-
+            FillCodesOnLocation(status.MainCodes, "Основные коды", document);
+            FillCodesOnLocation(status.BonusCodes, "Бонусные коды", document);
             return status;
         }
 
-        private void FillCodesOnLocation(FoxEngineStatus status, IHtmlDocument document)
+        private void FillCodesOnLocation(Dictionary<string, int> codesToFill, string codesSection, IHtmlDocument document)
         {
             var element = document.
                 GetElementsByTagName("strong")?.
-                FirstOrDefault(el => el.TextContent == "Основные коды").ParentElement;
+                FirstOrDefault(el => el.TextContent == codesSection)?.ParentElement;
             if (element == null)
             {
                 return;
@@ -34,19 +33,19 @@
             var codes = codesString.
                 Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries).
                 Select(s => s.Trim()).
+                Where(o => !string.IsNullOrWhiteSpace(o)).
                 GroupBy(o => o);
 
             foreach (var code in codes)
             {
-                status.CodesOnLocation.Add(code.Key, code.Count());
+                codesToFill.Add(code.Key, code.Count());
             }
         }
+
 
         private string GetTeamName(IHtmlDocument document)
         {
             return document.GetElementsByClassName("team_name").FirstOrDefault()?.TextContent ?? string.Empty;
         }
-
-
     }
 }
