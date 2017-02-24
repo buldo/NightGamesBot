@@ -79,6 +79,22 @@ namespace Buldo.Ngb.FoxApi.Tests
             RealParseText(ExamplesPatches.CodeAccepted, expected);
         }
 
+        [TestMethod]
+        public void TestCodeAcceptedWithComment()
+        {
+            var expected = new FoxEngineStatus
+            {
+                TeamName = "Рома",
+                InputResult = InputResult.CodeAccepted,
+                Message = "Текст Комментария"
+            };
+
+            expected.MainCodes.Add("А+", 5);
+            expected.BonusCodes.Add("-2", 5);
+
+            RealParseText(ExamplesPatches.CodeAcceptedWithComment, expected);
+        }
+
         private void RealParseText(string examplePath, FoxEngineStatus expected)
         {
             using (var stream = GetResourceStream(examplePath))
@@ -89,7 +105,7 @@ namespace Buldo.Ngb.FoxApi.Tests
 
                 Assert.AreEqual(expected.TeamName, actual.TeamName);
                 Assert.AreEqual(expected.InputResult, actual.InputResult);
-                Assert.AreEqual(expected.MessageText, actual.MessageText);
+                Assert.AreEqual(expected.Message, actual.Message);
                 CollectionAssert.AreEquivalent(expected.MainCodes,actual.MainCodes);
                 CollectionAssert.AreEquivalent(expected.BonusCodes, actual.BonusCodes);
                 CollectionAssert.AreEquivalent(expected.AcceptedCodes, expected.AcceptedCodes);

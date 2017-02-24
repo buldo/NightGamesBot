@@ -8,7 +8,7 @@
 
         public InputResult InputResult { get; internal set; }
 
-        public string MessageText { get; internal set; }
+        public string Message { get; internal set; } = string.Empty;
 
         public Dictionary<string, int> MainCodes { get; private set; } = new Dictionary<string, int>();
 

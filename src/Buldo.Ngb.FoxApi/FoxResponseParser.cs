@@ -22,25 +22,27 @@
 
         private void FillInputResult(FoxEngineStatus status, IHtmlDocument document)
         {
-            var message = document.GetElementById("message")?.TextContent?.ToLower();
-            if (string.IsNullOrWhiteSpace(message))
+            var message = document.GetElementById("message")?.TextContent;
+            var lowMessage = message?.ToLower();
+            if (string.IsNullOrWhiteSpace(lowMessage))
             {
                 status.InputResult = InputResult.None;
                 return;
             }
 
-            if (message.StartsWith("код не существует"))
+            if (lowMessage.StartsWith("код не существует"))
             {
                 status.InputResult = InputResult.CodeNotExists;
                 return;
             }
 
-            if (message.StartsWith("код принят"))
+            if (lowMessage.StartsWith("код принят"))
             {
                 status.InputResult = InputResult.CodeAccepted;
+                status.Message = message.Remove(0, "Код принят!".Length).Trim();
                 return;
             }
-            
+
 
         }
 

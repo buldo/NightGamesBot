@@ -9,6 +9,7 @@
     <EmbeddedResource Include="HtmlExamples\NewTaskWithBonusCodes.html" />
     <EmbeddedResource Include="HtmlExamples\CodeNotExists.html" />
     <EmbeddedResource Include="HtmlExamples\CodeAccepted.html" />
+    <EmbeddedResource Include="HtmlExamples\CodeAcceptedWithComment.html" />
   </ItemGroup>
 
   <ItemGroup>
