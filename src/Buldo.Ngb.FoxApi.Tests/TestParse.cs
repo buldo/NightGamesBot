@@ -45,10 +45,25 @@ namespace Buldo.Ngb.FoxApi.Tests
             };
 
             expected.MainCodes.Add("А+", 5);
-
+            expected.BonusCodes.Add("-2", 5);
             RealParseText(ExamplesPatches.NewTaskWithBonuses, expected);
         }
 
+        [TestMethod]
+        public void TestCodeNotExists()
+        {
+            var expected = new FoxEngineStatus
+            {
+                TeamName = "Рома",
+                InputResult = InputResult.CodeNotExists
+            };
+
+            expected.MainCodes.Add("А+", 5);
+            expected.BonusCodes.Add("-2", 5);
+            expected.InputResult = InputResult.CodeNotExists;
+
+            RealParseText(ExamplesPatches.CodeNotExists, expected);
+        }
 
         private void RealParseText(string examplePath, FoxEngineStatus expected)
         {
@@ -62,6 +77,7 @@ namespace Buldo.Ngb.FoxApi.Tests
                 Assert.AreEqual(expected.InputResult, actual.InputResult);
                 Assert.AreEqual(expected.MessageText, actual.MessageText);
                 CollectionAssert.AreEquivalent(expected.MainCodes,actual.MainCodes);
+                CollectionAssert.AreEquivalent(expected.BonusCodes, actual.BonusCodes);
                 CollectionAssert.AreEquivalent(expected.EnteredCodes, expected.EnteredCodes);
             }
         }

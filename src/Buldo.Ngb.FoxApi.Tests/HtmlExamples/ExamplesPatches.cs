@@ -5,5 +5,6 @@
         public static string NewTask => "Buldo.Ngb.FoxApi.Tests.HtmlExamples.NewTask.html";
 
         public static string NewTaskWithBonuses => "Buldo.Ngb.FoxApi.Tests.HtmlExamples.NewTaskWithBonusCodes.html";
+        public static string CodeNotExists => "Buldo.Ngb.FoxApi.Tests.HtmlExamples.CodeNotExists.html";
     }
 }

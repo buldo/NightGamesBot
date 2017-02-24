@@ -3,6 +3,9 @@
     public enum InputResult
     {
         None,
-
+        CodeEntered,
+        CodeNotExists,
+        CodeAlreadyEntered,
+        SpoilerOpened
     }
 }
