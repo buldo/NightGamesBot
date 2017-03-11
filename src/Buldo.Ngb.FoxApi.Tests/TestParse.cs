@@ -110,6 +110,36 @@ namespace Buldo.Ngb.FoxApi.Tests
             RealParseText(ExamplesPatches.CodeAlreadyAccepted, expected);
         }
 
+        [TestMethod]
+        public void TestWrongSpoiler()
+        {
+            var expected = new FoxEngineStatus
+            {
+                TeamName = "SG-1",
+                InputResult = InputResult.WrongSpoiler
+            };
+
+            expected.MainCodes.Add("Î", 1);
+
+            RealParseText(ExamplesPatches.WrongSpoiler, expected);
+        }
+
+        [TestMethod]
+        public void TestGoodSpoiler()
+        {
+            var expected = new FoxEngineStatus
+            {
+                TeamName = "SG-1",
+                InputResult = InputResult.SpoilerOpened
+            };
+
+            expected.MainCodes.Add("A+", 2);
+            expected.MainCodes.Add("A", 5);
+            expected.MainCodes.Add("B+", 2);
+
+            RealParseText(ExamplesPatches.GoodSpoiler, expected);
+        }
+
         private void RealParseText(string examplePath, FoxEngineStatus expected)
         {
             using (var stream = GetResourceStream(examplePath))

@@ -38,6 +38,12 @@
 
             if (lowMessage.StartsWith("код принят"))
             {
+                if (lowMessage.Contains("spoiler alert"))
+                {
+                    status.InputResult = InputResult.SpoilerOpened;
+                    return;
+                }
+
                 status.InputResult = InputResult.CodeAccepted;
                 status.Message = message.Remove(0, "Код принят!".Length).Trim();
                 return;
@@ -49,7 +55,11 @@
                 return;
             }
 
-
+            if (lowMessage.StartsWith("неверный код спойлера"))
+            {
+                status.InputResult = InputResult.WrongSpoiler;
+                return;
+            }
         }
 
         private void FillCodesOnLocation(Dictionary<string, int> codesToFill, string codesSection, IHtmlDocument document)

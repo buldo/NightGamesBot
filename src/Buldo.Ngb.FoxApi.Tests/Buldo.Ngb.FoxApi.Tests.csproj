@@ -11,6 +11,8 @@
     <EmbeddedResource Include="HtmlExamples\CodeAccepted.html" />
     <EmbeddedResource Include="HtmlExamples\CodeAcceptedWithComment.html" />
     <EmbeddedResource Include="HtmlExamples\CodeAlreadyAccepted.html" />
+    <EmbeddedResource Include="HtmlExamples\WrongSpoiler.html" />
+    <EmbeddedResource Include="HtmlExamples\GoodSpoiler.html" />
   </ItemGroup>
 
   <ItemGroup>

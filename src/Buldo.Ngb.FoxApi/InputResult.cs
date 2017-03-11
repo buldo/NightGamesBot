@@ -6,6 +6,7 @@
         CodeAccepted,
         CodeNotExists,
         CodeAlreadyAccepted,
-        SpoilerOpened
+        SpoilerOpened,
+        WrongSpoiler
     }
 }
