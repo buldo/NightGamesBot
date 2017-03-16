@@ -66,7 +66,7 @@ namespace Buldo.Ngb.Bot
             var user = _usersRepository.GetUser(update.Message.From.Id);
             if (user == null)
             {
-                if (update.Message.Type == MessageType.TextMessage && 
+                if (update.Message.Type == MessageType.TextMessage &&
                     update.Message.Text == _startupConfiguration.AccessKey)
                 {
                     user = new BotUser {TelegramId = update.Message.From.Id, IsActive = true };
@@ -74,7 +74,7 @@ namespace Buldo.Ngb.Bot
                     await _client.SendTextMessageAsync(update.Message.Chat.Id, "Добро пожаловать");
                     return null;
                 }
-                
+
                 await _client.SendTextMessageAsync(update.Message.Chat.Id, "Введите код доступа");
                 return null;
             }
@@ -86,6 +86,11 @@ namespace Buldo.Ngb.Bot
             }
 
             return user;
+        }
+
+        public void SetActiveEngine(EngineInfo engine)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.4
+VisualStudioVersion = 15.0.26228.9
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{AB978F3D-0F48-415D-B621-52B2BC5F1F41}"
 EndProject
@@ -16,6 +16,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Buldo.Ngb.FoxApi", "src\Buldo.Ngb.FoxApi\Buldo.Ngb.FoxApi.csproj", "{2FC1E1C4-C87A-4B5B-B6D0-FC7765FD2B17}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Buldo.Ngb.FoxApi.Tests", "src\Buldo.Ngb.FoxApi.Tests\Buldo.Ngb.FoxApi.Tests.csproj", "{B6BA24F7-FE9B-41C4-99B0-6025D0A40423}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Buldo.Ngb.Telegram", "src\Buldo.Ngb.Telegram\Buldo.Ngb.Telegram.csproj", "{42C78F69-05B4-4CFE-A3C7-DE496E5BAF31}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -99,6 +101,18 @@ Global
 		{B6BA24F7-FE9B-41C4-99B0-6025D0A40423}.Release|x64.Build.0 = Release|Any CPU
 		{B6BA24F7-FE9B-41C4-99B0-6025D0A40423}.Release|x86.ActiveCfg = Release|Any CPU
 		{B6BA24F7-FE9B-41C4-99B0-6025D0A40423}.Release|x86.Build.0 = Release|Any CPU
+		{42C78F69-05B4-4CFE-A3C7-DE496E5BAF31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42C78F69-05B4-4CFE-A3C7-DE496E5BAF31}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42C78F69-05B4-4CFE-A3C7-DE496E5BAF31}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{42C78F69-05B4-4CFE-A3C7-DE496E5BAF31}.Debug|x64.Build.0 = Debug|Any CPU
+		{42C78F69-05B4-4CFE-A3C7-DE496E5BAF31}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{42C78F69-05B4-4CFE-A3C7-DE496E5BAF31}.Debug|x86.Build.0 = Debug|Any CPU
+		{42C78F69-05B4-4CFE-A3C7-DE496E5BAF31}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42C78F69-05B4-4CFE-A3C7-DE496E5BAF31}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42C78F69-05B4-4CFE-A3C7-DE496E5BAF31}.Release|x64.ActiveCfg = Release|Any CPU
+		{42C78F69-05B4-4CFE-A3C7-DE496E5BAF31}.Release|x64.Build.0 = Release|Any CPU
+		{42C78F69-05B4-4CFE-A3C7-DE496E5BAF31}.Release|x86.ActiveCfg = Release|Any CPU
+		{42C78F69-05B4-4CFE-A3C7-DE496E5BAF31}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -110,5 +124,6 @@ Global
 		{EE9F6999-C285-459F-B6ED-4BB0AE54D0A1} = {AB978F3D-0F48-415D-B621-52B2BC5F1F41}
 		{2FC1E1C4-C87A-4B5B-B6D0-FC7765FD2B17} = {AB978F3D-0F48-415D-B621-52B2BC5F1F41}
 		{B6BA24F7-FE9B-41C4-99B0-6025D0A40423} = {AB978F3D-0F48-415D-B621-52B2BC5F1F41}
+		{42C78F69-05B4-4CFE-A3C7-DE496E5BAF31} = {AB978F3D-0F48-415D-B621-52B2BC5F1F41}
 	EndGlobalSection
 EndGlobal

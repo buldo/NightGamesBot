@@ -12,16 +12,20 @@ namespace Buldo.Ngb.Bot.Controllers
 
     public class SettingsController : IUpdateProcessor
     {
+        private const string LIST_COMMAND = "engines list";
+        private const string SELECT_COMMAND = "engines select";
+        private readonly GamesBot _bot;
         private readonly IEnginesRepository _enginesRepository;
         private readonly Dictionary<string, Func<Update, BotUser, TelegramBotClient, Task>> _commands;
         
-        public SettingsController(IEnginesRepository enginesRepository)
+        public SettingsController(GamesBot bot, IEnginesRepository enginesRepository)
         {
+            _bot = bot;
             _enginesRepository = enginesRepository;
             _commands = new Dictionary<string, Func<Update, BotUser, TelegramBotClient, Task>>()
             {
-                {"engines list", ShowEnginesList},
-                {"engines select", SelectActiveEngine}
+                {LIST_COMMAND, ShowEnginesList},
+                {SELECT_COMMAND, SelectActiveEngine}
             };
         }
 
@@ -47,7 +51,19 @@ namespace Buldo.Ngb.Bot.Controllers
 
         private Task SelectActiveEngine(Update update, BotUser user, TelegramBotClient client)
         {
-            return client.SendTextMessageAsync(update.Message.Chat.Id, "Движок выбран");
+            int engineId;
+            if (int.TryParse(update.Message.Text.Remove(0, SELECT_COMMAND.Length).Trim(), out engineId))
+            {
+                var engine = _enginesRepository.GetEngineById(engineId);
+                if (engine == null)
+                {
+                    return client.SendTextMessageAsync(update.Message.Chat.Id, "Движок не найден");
+                }
+
+                _bot.SetActiveEngine(engine);
+            }
+            
+            return client.SendTextMessageAsync(update.Message.Chat.Id, "Идентификатор не разпознан");
         }
 
         private Task ShowEnginesList(Update update, BotUser user, TelegramBotClient client)
