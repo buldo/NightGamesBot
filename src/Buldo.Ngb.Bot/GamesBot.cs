@@ -25,7 +25,7 @@ namespace Buldo.Ngb.Bot
             _usersRepository = usersRepository;
             _enginesRepository = enginesRepository;
 
-            _router.MapRoute("engines", new SettingsController(enginesRepository));
+            _router.MapRoute("engines", new SettingsController(this, enginesRepository));
             _router.SetDefaultRoute(new EchoController());
         }
 

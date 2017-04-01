@@ -21,5 +21,13 @@ namespace Buldo.Ngb.Web.BotInfrastructure
                 return context.Engines.ToList();
             }
         }
+
+        public EngineInfo GetEngineById(int engineId)
+        {
+            using (var context = ContextCreator())
+            {
+                return context.Engines.FirstOrDefault(e => e.Id == engineId);
+            }
+        }
     }
 }

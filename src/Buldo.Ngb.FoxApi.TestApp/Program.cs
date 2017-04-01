@@ -1,6 +1,5 @@
 ﻿using System;
 using Buldo.Ngb.FoxApi;
-using Buldo.Ngb.FoxClient;
 
 class Program
 {

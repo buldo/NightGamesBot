@@ -1,11 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp1.1</TargetFramework>
   </PropertyGroup>
-
   <ItemGroup>
-    <PackageReference Include="Telegram.Bot" Version="11.1.0-beta-3" />
+    <ProjectReference Include="..\Buldo.Ngb.FoxApi\Buldo.Ngb.FoxApi.csproj" />
   </ItemGroup>
-
 </Project>
