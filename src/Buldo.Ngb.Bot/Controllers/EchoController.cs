@@ -1,15 +1,16 @@
 ﻿namespace Buldo.Ngb.Bot.Controllers
 {
     using System.Threading.Tasks;
-    using UsersManagement;
-    using Telegram.Bot;
+    using Routing;
     using Telegram.Bot.Types;
 
-    internal class EchoController : IUpdateProcessor
+    [Route("")]
+    internal class EchoController : BaseTelegramController
     {
-        public Task ProcessUpdate(Update update, BotUser user, TelegramBotClient client)
+        [Route("")]
+        public Task ProcessUpdate(Message message)
         {
-            return client.SendTextMessageAsync(update.Message.Chat.Id, update.Message.Text);
+            return Response(message.Text);
         }
     }
 }

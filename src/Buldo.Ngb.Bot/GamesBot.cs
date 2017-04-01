@@ -1,37 +1,42 @@
-﻿using Buldo.Ngb.Bot.Controllers;
-using Buldo.Ngb.Bot.EnginesManagement;
-using Buldo.Ngb.Bot.UsersManagement;
-using Telegram.Bot.Types.Enums;
-
-namespace Buldo.Ngb.Bot
+﻿namespace Buldo.Ngb.Bot
 {
     using System.Threading.Tasks;
+    using Grace.DependencyInjection;
+    using Routing;
     using Telegram.Bot;
-    using Telegram.Bot.Args;
     using Telegram.Bot.Types;
+    using Buldo.Ngb.Bot.Controllers;
+    using Buldo.Ngb.Bot.EnginesManagement;
+    using Buldo.Ngb.Bot.UsersManagement;
+    using Telegram.Bot.Types.Enums;
 
     public class GamesBot : IUpdateMessagesProcessor
     {
         private readonly TelegramBotClient _client;
-        private readonly IUsersRepository _usersRepository;
-        private readonly IEnginesRepository _enginesRepository;
         private readonly BotStartupConfiguration _startupConfiguration;
-        private readonly Router _router = new Router();
+        private readonly IUsersRepository _usersRepository;
+        private readonly Router _router;
+        private readonly DependencyInjectionContainer _container = new DependencyInjectionContainer(configuration => configuration.AutoRegisterUnknown = false);
 
-        public GamesBot(BotStartupConfiguration startupConfiguration, IUsersRepository usersRepository, IEnginesRepository enginesRepository)
+        public GamesBot(BotStartupConfiguration startupConfiguration,
+                        IUsersRepository usersRepository,
+                        IEnginesRepository enginesRepository)
         {
             _startupConfiguration = startupConfiguration;
-            _client = new TelegramBotClient(_startupConfiguration.Token);
             _usersRepository = usersRepository;
-            _enginesRepository = enginesRepository;
+            _client = new TelegramBotClient(_startupConfiguration.Token);
+            _router = new Router(_container, _client);
 
-            _router.MapRoute("engines", new SettingsController(this, enginesRepository));
-            _router.SetDefaultRoute(new EchoController());
+            _container.Add(block => block.ExportInstance(usersRepository).As<IUsersRepository>());
+            _container.Add(block => block.ExportInstance(enginesRepository));
+
+            _router.RegisterMessageContoller<SettingsController>();
+            _router.RegisterMessageContoller<EchoController>();
         }
 
         public void StartLongPooling()
         {
-            _client.OnUpdate += ClientOnOnUpdate;
+            _client.OnUpdate += async (sender, args) => await ProcessUpdateAsync(args.Update);
             _client.StartReceiving();
         }
 
@@ -43,12 +48,7 @@ namespace Buldo.Ngb.Bot
                 return;
             }
 
-            await _router.ProcessUpdate(update, user, _client);
-        }
-
-        private async void ClientOnOnUpdate(object sender, UpdateEventArgs updateEventArgs)
-        {
-            await ProcessUpdateAsync(updateEventArgs.Update);
+            await _router.ProcessUpdateAsync(update, user);
         }
 
         public void EnableWebHook(string url)
@@ -86,11 +86,6 @@ namespace Buldo.Ngb.Bot
             }
 
             return user;
-        }
-
-        public void SetActiveEngine(EngineInfo engine)
-        {
-            throw new System.NotImplementedException();
         }
     }
 }
