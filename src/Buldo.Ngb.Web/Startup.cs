@@ -34,7 +34,7 @@ namespace Buldo.Ngb.Web
                 // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
                 try
                 {
-                    builder.AddUserSecrets();
+                    builder.AddUserSecrets<Startup>();
                 }
                 catch (System.Exception)
                 {
@@ -75,7 +75,7 @@ namespace Buldo.Ngb.Web
             }
 
             services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));
-            
+
             services.AddIdentity<ApplicationUser, IdentityRole>(o =>
                 {
                     o.Password.RequireNonAlphanumeric = false;
@@ -83,7 +83,7 @@ namespace Buldo.Ngb.Web
                 })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
-            
+
             services.AddMvc();
 
             // Add application services.
