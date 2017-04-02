@@ -57,6 +57,15 @@
             }
         }
 
+        public void Unregister(Type controllerType)
+        {
+            var toRemove = _messageRoutes.Where(r => r.ControllerType == controllerType).ToList();
+            foreach (var route in toRemove)
+            {
+                _messageRoutes.Remove(route);
+            }
+        }
+
         public Task ProcessUpdateAsync(Update update, BotUser user)
         {
             switch (update.Type)

@@ -1,5 +1,7 @@
 ﻿namespace Buldo.Ngb.Bot
 {
+    using System;
+    using System.Linq;
     using System.Threading.Tasks;
     using Grace.DependencyInjection;
     using Routing;
@@ -17,10 +19,12 @@
         private readonly IUsersRepository _usersRepository;
         private readonly Router _router;
         private readonly DependencyInjectionContainer _container = new DependencyInjectionContainer(configuration => configuration.AutoRegisterUnknown = false);
+        private readonly EnginesManager _enginesManager;
+        private readonly GameControllersManager _gameControllersManager;
 
         public GamesBot(BotStartupConfiguration startupConfiguration,
                         IUsersRepository usersRepository,
-                        IEnginesRepository enginesRepository)
+                        IEngineInfosRepository enginesRepository)
         {
             _startupConfiguration = startupConfiguration;
             _usersRepository = usersRepository;
@@ -28,11 +32,26 @@
             _router = new Router(_container, _client);
 
             _container.Add(block => block.ExportInstance(usersRepository).As<IUsersRepository>());
-            _container.Add(block => block.ExportInstance(enginesRepository));
+            _container.Add(block => block.ExportInstance(enginesRepository).As<IEngineInfosRepository>());
+            _container.Add(block => block.Export<EnginesFactory>().Lifestyle.Singleton());
+            _container.Add(block => block.Export<EnginesManager>().Lifestyle.Singleton());
 
+            // Выставляем Engine по умолчанию
+            _enginesManager = _container.Locate<EnginesManager>();
+            var defaultEngineInfo = enginesRepository.GetEngines().FirstOrDefault();
+            if (defaultEngineInfo != null)
+            {
+                _enginesManager.ActivateEngine(defaultEngineInfo);
+            }
+
+            _gameControllersManager = new GameControllersManager(_enginesManager, _router);
+
+            // Устанавливаем маршруты
             _router.RegisterMessageContoller<SettingsController>();
-            _router.RegisterMessageContoller<EchoController>();
+            //_router.RegisterMessageContoller<EchoController>();
         }
+
+
 
         public void StartLongPooling()
         {

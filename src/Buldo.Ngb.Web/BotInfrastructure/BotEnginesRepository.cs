@@ -7,7 +7,7 @@ using Buldo.Ngb.Web.Data;
 
 namespace Buldo.Ngb.Web.BotInfrastructure
 {
-    internal class BotEnginesRepository : BaseBotRepository, IEnginesRepository
+    internal class BotEnginesRepository : BaseBotRepository, IEngineInfosRepository
     {
         public BotEnginesRepository(Func<ApplicationDbContext> contextCreator)
             : base(contextCreator)

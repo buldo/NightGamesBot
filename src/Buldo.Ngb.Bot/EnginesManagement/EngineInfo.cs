@@ -11,5 +11,7 @@
         public string Login { get; set; }
 
         public string Password { get; set; }
+
+        public GameType GameType { get; set; }
     }
 }

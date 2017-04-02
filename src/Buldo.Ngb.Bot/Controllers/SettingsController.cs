@@ -1,20 +1,21 @@
-﻿using System.Text;
-using Buldo.Ngb.Bot.EnginesManagement;
-
-namespace Buldo.Ngb.Bot.Controllers
+﻿namespace Buldo.Ngb.Bot.Controllers
 {
     using System;
+    using System.Text;
     using System.Threading.Tasks;
+    using EnginesManagement;
     using Routing;
 
     [Route("engines")]
-    public class SettingsController : BaseTelegramController
+    internal class SettingsController : BaseTelegramController
     {
-        private readonly IEnginesRepository _enginesRepository;
+        private readonly IEngineInfosRepository _enginesRepository;
+        private readonly EnginesManager _enginesManager;
 
-        public SettingsController(IEnginesRepository enginesRepository)
+        public SettingsController(IEngineInfosRepository enginesRepository, EnginesManager enginesManager)
         {
             _enginesRepository = enginesRepository;
+            _enginesManager = enginesManager;
         }
 
         [Route("list")]
@@ -41,8 +42,9 @@ namespace Buldo.Ngb.Bot.Controllers
                     return Response("Движок не найден");
                 }
 
-                //_bot.SetActiveEngine(engine);
-                return Response($"Выбран движок {engine.Id}");
+                _enginesManager.ActivateEngine(engine);
+
+                return Response($"Выбран движок {engine.Id} {engine.Name}");
             }
 
             return Response("Идентификатор не разпознан");

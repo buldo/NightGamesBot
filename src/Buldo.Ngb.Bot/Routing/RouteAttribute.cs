@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Buldo.Ngb.Bot.Routing
+﻿namespace Buldo.Ngb.Bot.Routing
 {
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
+    using System;
+
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
     internal class RouteAttribute : Attribute
     {
         public RouteAttribute(string path)

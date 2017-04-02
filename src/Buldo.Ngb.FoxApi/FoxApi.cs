@@ -18,6 +18,7 @@
 
         public FoxApi(string baseUrl)
         {
+            baseUrl = baseUrl.StartsWith("http") ? baseUrl : "http://" + baseUrl;
             var httpHandler = new HttpClientHandler { CookieContainer = new CookieContainer(), UseCookies = true, UseProxy = false };
             _httpClient = new HttpClient(httpHandler, true)
             {
