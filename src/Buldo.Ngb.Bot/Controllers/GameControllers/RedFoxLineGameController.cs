@@ -21,7 +21,10 @@
         public async Task GetStatus()
         {
             var status = await _engine.GetStatus();
-            await ResponseAsync($"{status.TeamName}");
+            if (status != null)
+            {
+                await ResponseAsync(status);
+            }
         }
 
         [Route("set interval")]

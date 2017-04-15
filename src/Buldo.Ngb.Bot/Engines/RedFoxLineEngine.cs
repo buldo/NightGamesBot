@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Buldo.Ngb.Bot.Engines
+﻿namespace Buldo.Ngb.Bot.Engines
 {
+    using System;
+    using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
     using EnginesManagement;
@@ -11,13 +9,15 @@ namespace Buldo.Ngb.Bot.Engines
 
     internal class RedFoxLineEngine : BaseGameEngine
     {
+        private readonly BroadcastSender _broadcastSender;
         private readonly FoxApi _api;
         private readonly Timer _timer;
 
         private FoxEngineStatus _lastStatus;
 
-        public RedFoxLineEngine(EngineInfo settings)
+        public RedFoxLineEngine(EngineInfo settings, BroadcastSender broadcastSender)
         {
+            _broadcastSender = broadcastSender;
             _timer = new Timer(RefreshTimerCallback, null, Timeout.Infinite, Timeout.Infinite);
             _api = new FoxApi(settings.Address);
             _api.SetCredentials(settings.Login, settings.Password);
@@ -25,9 +25,17 @@ namespace Buldo.Ngb.Bot.Engines
 
         public override GameType Type => GameType.RedFoxLine;
 
-        public Task<FoxEngineStatus> GetStatus()
+        public async Task<string> GetStatus()
         {
-            return _api.GetStatusAsync();
+            var newStatus = await _api.GetStatusAsync();
+            if (_lastStatus != newStatus)
+            {
+                _lastStatus = newStatus;
+                await _broadcastSender.SendBroadcastMessageAsync(PrepareMessage(_lastStatus));
+                return null;
+            }
+
+            return PrepareMessage(_lastStatus);
         }
 
         public void SetAutoRefreshInterval(int interval)
@@ -44,11 +52,56 @@ namespace Buldo.Ngb.Bot.Engines
         private async void RefreshTimerCallback(object state)
         {
             var currentStatus = await _api.GetStatusAsync();
-            if (_lastStatus != currentStatus)
+            ProcessStatusInfo(currentStatus);
+        }
+
+        private async void ProcessStatusInfo(FoxEngineStatus currentStatus)
+        {
+            var newStatus = await _api.GetStatusAsync();
+            if (_lastStatus != newStatus)
             {
-                _lastStatus = currentStatus;
-                
+                _lastStatus = newStatus;
+                await _broadcastSender.SendBroadcastMessageAsync(PrepareMessage(_lastStatus));
             }
+        }
+
+        private string PrepareMessage(FoxEngineStatus status)
+        {
+            var builder = new StringBuilder();
+
+            if (!status.IsGameRunning)
+            {
+                builder.AppendLine(status.TeamName);
+                builder.AppendLine("Игра не запущена");
+                return builder.ToString();
+            }
+
+            if (string.IsNullOrWhiteSpace(status.Message))
+            {
+                builder.AppendLine(status.Message);
+            }
+
+            if (status.MainCodes.Count > 0)
+            {
+                builder.AppendLine("Основные коды");
+                foreach (var code in status.MainCodes)
+                {
+                    builder.AppendLine($"{code.Key}: {code.Value}");
+                }
+                builder.AppendLine();
+            }
+
+            if (status.MainCodes.Count > 0)
+            {
+                builder.AppendLine("Бонусные коды");
+                foreach (var code in status.BonusCodes)
+                {
+                    builder.AppendLine($"{code.Key}: {code.Value}");
+                }
+                builder.AppendLine();
+            }
+
+            return builder.ToString();
         }
     }
 }

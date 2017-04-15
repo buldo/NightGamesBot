@@ -10,10 +10,29 @@
         public FoxEngineStatus Parse(IHtmlDocument document)
         {
             var teamName = GetTeamName(document);
-            var mainCodes = ParseCodes("Основные коды", document);
-            var bonusCodes = ParseCodes("Бонусные коды", document);
-            var inputResult = ParseInputResult(document);
-            return new FoxEngineStatus(teamName, inputResult.result, inputResult.message,mainCodes,bonusCodes, new List<AcceptedCode>());
+            var isRunning = ParseIsRunning(document);
+            if (isRunning)
+            {
+                var mainCodes = ParseCodes("Основные коды", document);
+                var bonusCodes = ParseCodes("Бонусные коды", document);
+                var inputResult = ParseInputResult(document);
+                return new FoxEngineStatus(teamName, true, inputResult.result, inputResult.message, mainCodes, bonusCodes, new List<AcceptedCode>());
+            }
+            else
+            {
+                return new FoxEngineStatus(teamName,
+                                           false,
+                                           InputResult.None,
+                                           string.Empty,
+                                           new Dictionary<string, int>(),
+                                           new Dictionary<string, int>(),
+                                           new List<AcceptedCode>());
+            }
+        }
+
+        private bool ParseIsRunning(IHtmlDocument document)
+        {
+            return document.GetElementsByTagName("h3").All(e => e.TextContent != "На данный момент нет активных игр");
         }
 
         private (InputResult result, string message) ParseInputResult(IHtmlDocument document)

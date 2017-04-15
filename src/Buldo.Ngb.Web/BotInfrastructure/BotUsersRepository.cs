@@ -1,6 +1,8 @@
 ﻿namespace Buldo.Ngb.Web.BotInfrastructure
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using Buldo.Ngb.Bot.UsersManagement;
     using Buldo.Ngb.Web.Data;
 
@@ -25,6 +27,14 @@
             {
                 context.BotUsers.Add(botUser);
                 context.SaveChanges();
+            }
+        }
+
+        public List<BotUser> GetAllUsers()
+        {
+            using (var context = ContextCreator())
+            {
+                return context.BotUsers.ToList();
             }
         }
     }

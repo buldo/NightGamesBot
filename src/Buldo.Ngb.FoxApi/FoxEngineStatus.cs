@@ -9,6 +9,7 @@
     public class FoxEngineStatus : IEquatable<FoxEngineStatus>
     {
         public FoxEngineStatus([NotNull] string teamName,
+                               bool isGameRunning,
                                InputResult inputResult,
                                [NotNull] string message,
                                [NotNull] IDictionary<string, int> mainCodes,
@@ -18,10 +19,13 @@
             TeamName = teamName;
             InputResult = inputResult;
             Message = message;
+            IsGameRunning = isGameRunning;
             AcceptedCodes = new ReadOnlyCollection<AcceptedCode>(acceptedCodes);
             BonusCodes = new ReadOnlyDictionary<string, int>(bonusCodes);
             MainCodes = new ReadOnlyDictionary<string, int>(mainCodes);
         }
+
+        public bool IsGameRunning { get; }
 
         public string TeamName { get; }
 

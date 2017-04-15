@@ -34,6 +34,7 @@ namespace Buldo.Ngb.FoxApi.Tests
 
 
             var expected = new FoxEngineStatus("SG-1",
+                                               true,
                                                InputResult.None,
                                                string.Empty,
                                                expextedMainCodes,
@@ -49,6 +50,7 @@ namespace Buldo.Ngb.FoxApi.Tests
         public void TestNewTaskWithBonusesParse()
         {
             var expected = new FoxEngineStatus("Рома",
+                                               true,
                                                InputResult.None,
                                                string.Empty,
                                                new Dictionary<string, int> {{"А+", 5}},
@@ -61,6 +63,7 @@ namespace Buldo.Ngb.FoxApi.Tests
         public void TestCodeNotExists()
         {
             var expected = new FoxEngineStatus("Рома",
+                                               true,
                                                InputResult.CodeNotExists,
                                                string.Empty,
                                                new Dictionary<string, int> {{"А+", 5}},
@@ -74,10 +77,11 @@ namespace Buldo.Ngb.FoxApi.Tests
         public void TestCodeAccepted()
         {
             var expected = new FoxEngineStatus("Рома",
+                                               true,
                                                InputResult.CodeAccepted,
                                                string.Empty,
-                                               new Dictionary<string, int> { { "А+", 5 } },
-                                               new Dictionary<string, int> { { "-2", 5 } },
+                                               new Dictionary<string, int> {{"А+", 5}},
+                                               new Dictionary<string, int> {{"-2", 5}},
                                                new List<AcceptedCode>());
 
             RealParseText(ExamplesPatches.CodeAccepted, expected);
@@ -87,10 +91,11 @@ namespace Buldo.Ngb.FoxApi.Tests
         public void TestCodeAcceptedWithComment()
         {
             var expected = new FoxEngineStatus("Рома",
+                                               true,
                                                InputResult.CodeAccepted,
                                                "Текст Комментария",
-                                               new Dictionary<string, int> { { "А+", 5 } },
-                                               new Dictionary<string, int> { { "-2", 5 } },
+                                               new Dictionary<string, int> {{"А+", 5}},
+                                               new Dictionary<string, int> {{"-2", 5}},
                                                new List<AcceptedCode>());
 
             RealParseText(ExamplesPatches.CodeAcceptedWithComment, expected);
@@ -100,10 +105,11 @@ namespace Buldo.Ngb.FoxApi.Tests
         public void TestCodeAlreadyAccepted()
         {
             var expected = new FoxEngineStatus("Рома",
+                                               true,
                                                InputResult.CodeAlreadyAccepted,
                                                string.Empty,
-                                               new Dictionary<string, int> { { "А+", 5 } },
-                                               new Dictionary<string, int> { { "-2", 5 } },
+                                               new Dictionary<string, int> {{"А+", 5}},
+                                               new Dictionary<string, int> {{"-2", 5}},
                                                new List<AcceptedCode>());
 
             RealParseText(ExamplesPatches.CodeAlreadyAccepted, expected);
@@ -113,6 +119,7 @@ namespace Buldo.Ngb.FoxApi.Tests
         public void TestWrongSpoiler()
         {
             var expected = new FoxEngineStatus("SG-1",
+                                               true,
                                                InputResult.WrongSpoiler,
                                                string.Empty,
                                                new Dictionary<string, int> {{"О", 1}},
@@ -126,6 +133,7 @@ namespace Buldo.Ngb.FoxApi.Tests
         public void TestGoodSpoiler()
         {
             var expected = new FoxEngineStatus("SG-1",
+                                               true,
                                                InputResult.SpoilerOpened,
                                                string.Empty,
                                                new Dictionary<string, int>

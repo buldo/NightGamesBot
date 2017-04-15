@@ -34,6 +34,8 @@
             _container.Add(block => block.ExportInstance(enginesRepository).As<IEngineInfosRepository>());
             _container.Add(block => block.Export<EnginesFactory>().Lifestyle.Singleton());
             _container.Add(block => block.Export<EnginesManager>().Lifestyle.Singleton());
+            _container.Add(block => block.ExportInstance(_client).As<TelegramBotClient>());
+            _container.Add(block => block.Export<BroadcastSender>().Lifestyle.Singleton());
 
             // Выставляем Engine по умолчанию
             _enginesManager = _container.Locate<EnginesManager>();
