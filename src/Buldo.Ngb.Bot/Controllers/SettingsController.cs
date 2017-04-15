@@ -27,7 +27,7 @@
                 builder.AppendLine($"{engineInfo.Id}. {engineInfo.Name}");
             }
 
-            return Response(builder.ToString());
+            return ResponseAsync(builder.ToString());
         }
 
         [Route("select")]
@@ -39,21 +39,21 @@
                 var engine = _enginesRepository.GetEngineById(engineId);
                 if (engine == null)
                 {
-                    return Response("Движок не найден");
+                    return ResponseAsync("Движок не найден");
                 }
 
                 _enginesManager.ActivateEngine(engine);
 
-                return Response($"Выбран движок {engine.Id} {engine.Name}");
+                return ResponseAsync($"Выбран движок {engine.Id} {engine.Name}");
             }
 
-            return Response("Идентификатор не разпознан");
+            return ResponseAsync("Идентификатор не разпознан");
         }
 
         [Route("")]
         public Task Index()
         {
-            return Response($"engines list - список движков{Environment.NewLine}engines select [Id]- выбор движка");
+            return ResponseAsync($"engines list - список движков{Environment.NewLine}engines select [Id]- выбор движка");
         }
     }
 }

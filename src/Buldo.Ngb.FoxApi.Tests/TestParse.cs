@@ -1,5 +1,6 @@
 namespace Buldo.Ngb.FoxApi.Tests
 {
+    using System.Collections.Generic;
     using System.IO;
     using System.Reflection;
     using AngleSharp.Parser.Html;
@@ -21,17 +22,25 @@ namespace Buldo.Ngb.FoxApi.Tests
         [TestMethod]
         public void TestNewTaskParse()
         {
-            var expected = new FoxEngineStatus
+            var expextedMainCodes = new Dictionary<string, int>
             {
-                TeamName = "SG-1",
+                {"2А", 3},
+                {"2В+", 1},
+                {"2А+", 5},
+                {"1В", 1},
+                {"1А", 1},
+                {"1А+", 1},
             };
 
-            expected.MainCodes.Add("2А",  3);
-            expected.MainCodes.Add("2В+", 1);
-            expected.MainCodes.Add("2А+", 5);
-            expected.MainCodes.Add("1В",  1);
-            expected.MainCodes.Add("1А",  1);
-            expected.MainCodes.Add("1А+", 1);
+
+            var expected = new FoxEngineStatus("SG-1",
+                                               InputResult.None,
+                                               string.Empty,
+                                               expextedMainCodes,
+                                               new Dictionary<string, int>(),
+                                               new List<AcceptedCode>());
+
+
 
             RealParseText(ExamplesPatches.NewTask, expected);
         }
@@ -39,27 +48,24 @@ namespace Buldo.Ngb.FoxApi.Tests
         [TestMethod]
         public void TestNewTaskWithBonusesParse()
         {
-            var expected = new FoxEngineStatus
-            {
-                TeamName = "Рома",
-            };
-
-            expected.MainCodes.Add("А+", 5);
-            expected.BonusCodes.Add("-2", 5);
+            var expected = new FoxEngineStatus("Рома",
+                                               InputResult.None,
+                                               string.Empty,
+                                               new Dictionary<string, int> {{"А+", 5}},
+                                               new Dictionary<string, int> {{"-2", 5}},
+                                               new List<AcceptedCode>());
             RealParseText(ExamplesPatches.NewTaskWithBonuses, expected);
         }
 
         [TestMethod]
         public void TestCodeNotExists()
         {
-            var expected = new FoxEngineStatus
-            {
-                TeamName = "Рома",
-                InputResult = InputResult.CodeNotExists
-            };
-
-            expected.MainCodes.Add("А+", 5);
-            expected.BonusCodes.Add("-2", 5);
+            var expected = new FoxEngineStatus("Рома",
+                                               InputResult.CodeNotExists,
+                                               string.Empty,
+                                               new Dictionary<string, int> {{"А+", 5}},
+                                               new Dictionary<string, int> {{"-2", 5}},
+                                               new List<AcceptedCode>());
 
             RealParseText(ExamplesPatches.CodeNotExists, expected);
         }
@@ -67,14 +73,12 @@ namespace Buldo.Ngb.FoxApi.Tests
         [TestMethod]
         public void TestCodeAccepted()
         {
-            var expected = new FoxEngineStatus
-            {
-                TeamName = "Рома",
-                InputResult = InputResult.CodeAccepted
-            };
-
-            expected.MainCodes.Add("А+", 5);
-            expected.BonusCodes.Add("-2", 5);
+            var expected = new FoxEngineStatus("Рома",
+                                               InputResult.CodeAccepted,
+                                               string.Empty,
+                                               new Dictionary<string, int> { { "А+", 5 } },
+                                               new Dictionary<string, int> { { "-2", 5 } },
+                                               new List<AcceptedCode>());
 
             RealParseText(ExamplesPatches.CodeAccepted, expected);
         }
@@ -82,15 +86,12 @@ namespace Buldo.Ngb.FoxApi.Tests
         [TestMethod]
         public void TestCodeAcceptedWithComment()
         {
-            var expected = new FoxEngineStatus
-            {
-                TeamName = "Рома",
-                InputResult = InputResult.CodeAccepted,
-                Message = "Текст Комментария"
-            };
-
-            expected.MainCodes.Add("А+", 5);
-            expected.BonusCodes.Add("-2", 5);
+            var expected = new FoxEngineStatus("Рома",
+                                               InputResult.CodeAccepted,
+                                               "Текст Комментария",
+                                               new Dictionary<string, int> { { "А+", 5 } },
+                                               new Dictionary<string, int> { { "-2", 5 } },
+                                               new List<AcceptedCode>());
 
             RealParseText(ExamplesPatches.CodeAcceptedWithComment, expected);
         }
@@ -98,14 +99,12 @@ namespace Buldo.Ngb.FoxApi.Tests
         [TestMethod]
         public void TestCodeAlreadyAccepted()
         {
-            var expected = new FoxEngineStatus
-            {
-                TeamName = "Рома",
-                InputResult = InputResult.CodeAlreadyAccepted
-            };
-
-            expected.MainCodes.Add("А+", 5);
-            expected.BonusCodes.Add("-2", 5);
+            var expected = new FoxEngineStatus("Рома",
+                                               InputResult.CodeAlreadyAccepted,
+                                               string.Empty,
+                                               new Dictionary<string, int> { { "А+", 5 } },
+                                               new Dictionary<string, int> { { "-2", 5 } },
+                                               new List<AcceptedCode>());
 
             RealParseText(ExamplesPatches.CodeAlreadyAccepted, expected);
         }
@@ -113,13 +112,12 @@ namespace Buldo.Ngb.FoxApi.Tests
         [TestMethod]
         public void TestWrongSpoiler()
         {
-            var expected = new FoxEngineStatus
-            {
-                TeamName = "SG-1",
-                InputResult = InputResult.WrongSpoiler
-            };
-
-            expected.MainCodes.Add("О", 1);
+            var expected = new FoxEngineStatus("SG-1",
+                                               InputResult.WrongSpoiler,
+                                               string.Empty,
+                                               new Dictionary<string, int> {{"О", 1}},
+                                               new Dictionary<string, int>(),
+                                               new List<AcceptedCode>());
 
             RealParseText(ExamplesPatches.WrongSpoiler, expected);
         }
@@ -127,15 +125,17 @@ namespace Buldo.Ngb.FoxApi.Tests
         [TestMethod]
         public void TestGoodSpoiler()
         {
-            var expected = new FoxEngineStatus
-            {
-                TeamName = "SG-1",
-                InputResult = InputResult.SpoilerOpened
-            };
-
-            expected.MainCodes.Add("A+", 2);
-            expected.MainCodes.Add("A", 5);
-            expected.MainCodes.Add("B+", 2);
+            var expected = new FoxEngineStatus("SG-1",
+                                               InputResult.SpoilerOpened,
+                                               string.Empty,
+                                               new Dictionary<string, int>
+                                               {
+                                                   {"A+", 2},
+                                                   {"A", 5},
+                                                   {"B+", 2}
+                                               },
+                                               new Dictionary<string, int>(),
+                                               new List<AcceptedCode>());
 
             RealParseText(ExamplesPatches.GoodSpoiler, expected);
         }
@@ -148,12 +148,7 @@ namespace Buldo.Ngb.FoxApi.Tests
                 var document = parser.Parse(stream);
                 var actual = _parser.Parse(document);
 
-                Assert.AreEqual(expected.TeamName, actual.TeamName);
-                Assert.AreEqual(expected.InputResult, actual.InputResult);
-                Assert.AreEqual(expected.Message, actual.Message);
-                CollectionAssert.AreEquivalent(expected.MainCodes,actual.MainCodes);
-                CollectionAssert.AreEquivalent(expected.BonusCodes, actual.BonusCodes);
-                CollectionAssert.AreEquivalent(expected.AcceptedCodes, expected.AcceptedCodes);
+                Assert.AreEqual(expected, actual);
             }
         }
 

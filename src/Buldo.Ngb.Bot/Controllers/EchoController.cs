@@ -10,7 +10,7 @@
         [Route("")]
         public Task ProcessUpdate(Message message)
         {
-            return Response(message.Text);
+            return ResponseAsync(message.Text);
         }
     }
 }

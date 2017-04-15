@@ -9,82 +9,73 @@
     {
         public FoxEngineStatus Parse(IHtmlDocument document)
         {
-            var status = new FoxEngineStatus
-            {
-                TeamName = GetTeamName(document)
-            };
-
-            FillCodesOnLocation(status.MainCodes, "Основные коды", document);
-            FillCodesOnLocation(status.BonusCodes, "Бонусные коды", document);
-            FillInputResult(status, document);
-            return status;
+            var teamName = GetTeamName(document);
+            var mainCodes = ParseCodes("Основные коды", document);
+            var bonusCodes = ParseCodes("Бонусные коды", document);
+            var inputResult = ParseInputResult(document);
+            return new FoxEngineStatus(teamName, inputResult.result, inputResult.message,mainCodes,bonusCodes, new List<AcceptedCode>());
         }
 
-        private void FillInputResult(FoxEngineStatus status, IHtmlDocument document)
+        private (InputResult result, string message) ParseInputResult(IHtmlDocument document)
         {
             var message = document.GetElementById("message")?.TextContent;
             var lowMessage = message?.ToLower();
             if (string.IsNullOrWhiteSpace(lowMessage))
             {
-                status.InputResult = InputResult.None;
-                return;
+                return (InputResult.None, string.Empty);
             }
 
             if (lowMessage.StartsWith("код не существует"))
             {
-                status.InputResult = InputResult.CodeNotExists;
-                return;
+                return (InputResult.CodeNotExists, string.Empty);
             }
 
             if (lowMessage.StartsWith("код принят"))
             {
                 if (lowMessage.Contains("spoiler alert"))
                 {
-                    status.InputResult = InputResult.SpoilerOpened;
-                    return;
+                    return (InputResult.SpoilerOpened, string.Empty);
                 }
 
-                status.InputResult = InputResult.CodeAccepted;
-                status.Message = message.Remove(0, "Код принят!".Length).Trim();
-                return;
+                return (InputResult.CodeAccepted, message.Remove(0, "Код принят!".Length).Trim());
             }
 
             if (lowMessage.StartsWith("этот код уже был введен"))
             {
-                status.InputResult = InputResult.CodeAlreadyAccepted;
-                return;
+                return (InputResult.CodeAlreadyAccepted, string.Empty);
             }
 
             if (lowMessage.StartsWith("неверный код спойлера"))
             {
-                status.InputResult = InputResult.WrongSpoiler;
-                return;
+                return (InputResult.WrongSpoiler, string.Empty);
             }
+
+            return (InputResult.None, string.Empty);
         }
 
-        private void FillCodesOnLocation(Dictionary<string, int> codesToFill, string codesSection, IHtmlDocument document)
+        private Dictionary<string, int> ParseCodes(string codesSection, IHtmlDocument document)
         {
+            Dictionary<string, int> codesToFill = new Dictionary<string, int>();
+
             var element = document.
                 GetElementsByTagName("strong")?.
                 FirstOrDefault(el => el.TextContent == codesSection)?.ParentElement;
-            if (element == null)
+            if (element != null)
             {
-                return;
+                var codesString = element.TextContent.Split(':')[1];
+                var codes = codesString.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries)
+                                       .Select(s => s.Trim())
+                                       .Where(o => !string.IsNullOrWhiteSpace(o))
+                                       .GroupBy(o => o);
+
+                foreach (var code in codes)
+                {
+                    codesToFill.Add(code.Key, code.Count());
+                }
             }
 
-            var codesString = element.TextContent.Split(':')[1];
-            var codes = codesString.
-                Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries).
-                Select(s => s.Trim()).
-                Where(o => !string.IsNullOrWhiteSpace(o)).
-                GroupBy(o => o);
-
-            foreach (var code in codes)
-            {
-                codesToFill.Add(code.Key, code.Count());
-            }
+            return codesToFill;
         }
-
 
         private string GetTeamName(IHtmlDocument document)
         {

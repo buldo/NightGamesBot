@@ -1,15 +1,14 @@
 ﻿namespace Buldo.Ngb.Bot
 {
-    using System;
     using System.Linq;
     using System.Threading.Tasks;
     using Grace.DependencyInjection;
     using Routing;
     using Telegram.Bot;
     using Telegram.Bot.Types;
-    using Buldo.Ngb.Bot.Controllers;
-    using Buldo.Ngb.Bot.EnginesManagement;
-    using Buldo.Ngb.Bot.UsersManagement;
+    using Controllers;
+    using EnginesManagement;
+    using UsersManagement;
     using Telegram.Bot.Types.Enums;
 
     public class GamesBot : IUpdateMessagesProcessor

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Buldo.Ngb.Bot.Controllers
+﻿namespace Buldo.Ngb.Bot.Controllers.GameControllers
 {
     using System.Threading.Tasks;
     using Engines;
@@ -25,8 +21,21 @@ namespace Buldo.Ngb.Bot.Controllers
         public async Task GetStatus()
         {
             var status = await _engine.GetStatus();
-            Response($"{status.TeamName}");
+            await ResponseAsync($"{status.TeamName}");
         }
 
+        [Route("set interval")]
+        [Route("автообновление")]
+        public void SetAutoRefresh(int interval)
+        {
+            if (interval > 0)
+            {
+                _engine.SetAutoRefreshInterval(interval);
+            }
+            else
+            {
+                _engine.DisableAutoRefresh();
+            }
+        }
     }
 }

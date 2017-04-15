@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Buldo.Ngb.Bot.Engines
+﻿namespace Buldo.Ngb.Bot.Engines
 {
     using EnginesManagement;
 

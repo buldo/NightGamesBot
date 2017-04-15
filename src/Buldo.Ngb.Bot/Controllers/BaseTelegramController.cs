@@ -15,7 +15,7 @@
 
         public BotUser User { get; set; }
 
-        public Task Response(string message)
+        protected Task ResponseAsync(string message)
         {
             switch (Update.Type)
             {
