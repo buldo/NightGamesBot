@@ -27,15 +27,12 @@
 
         public async Task<string> GetStatus()
         {
-            var newStatus = await _api.GetStatusAsync();
-            if (_lastStatus != newStatus)
+            if (!await RequestNewStatusAsync())
             {
-                _lastStatus = newStatus;
-                await _broadcastSender.SendBroadcastMessageAsync(PrepareMessage(_lastStatus));
-                return null;
+                return PrepareMessage(_lastStatus);
             }
 
-            return PrepareMessage(_lastStatus);
+            return null;
         }
 
         public void SetAutoRefreshInterval(int interval)
@@ -49,6 +46,14 @@
             _timer.Change(Timeout.Infinite, Timeout.Infinite);
         }
 
+        public async Task ProcessUserInput(string data)
+        {
+            if (_lastStatus == null)
+            {
+                await RequestNewStatusAsync();
+            }
+        }
+
         private async void RefreshTimerCallback(object state)
         {
             var currentStatus = await _api.GetStatusAsync();
@@ -57,12 +62,7 @@
 
         private async void ProcessStatusInfo(FoxEngineStatus currentStatus)
         {
-            var newStatus = await _api.GetStatusAsync();
-            if (_lastStatus != newStatus)
-            {
-                _lastStatus = newStatus;
-                await _broadcastSender.SendBroadcastMessageAsync(PrepareMessage(_lastStatus));
-            }
+            await RequestNewStatusAsync();
         }
 
         private string PrepareMessage(FoxEngineStatus status)
@@ -102,6 +102,19 @@
             }
 
             return builder.ToString();
+        }
+
+        private async Task<bool> RequestNewStatusAsync()
+        {
+            var newStatus = await _api.GetStatusAsync();
+            if (_lastStatus != newStatus)
+            {
+                _lastStatus = newStatus;
+                await _broadcastSender.SendBroadcastMessageAsync(PrepareMessage(_lastStatus));
+                return true;
+            }
+
+            return false;
         }
     }
 }

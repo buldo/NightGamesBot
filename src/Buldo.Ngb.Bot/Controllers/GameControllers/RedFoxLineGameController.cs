@@ -40,5 +40,11 @@
                 _engine.DisableAutoRefresh();
             }
         }
+
+        [Route("")]
+        public Task InputDataAsync(string data)
+        {
+            return _engine.ProcessUserInput(data);
+        }
     }
 }
