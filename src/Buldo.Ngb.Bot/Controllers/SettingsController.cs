@@ -42,7 +42,7 @@
                     return ResponseAsync("Движок не найден");
                 }
 
-                _enginesManager.ActivateEngine(engine);
+                _enginesManager.TryActivateEngine(engine);
 
                 return ResponseAsync($"Выбран движок {engine.Id} {engine.Name}");
             }

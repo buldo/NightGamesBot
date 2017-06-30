@@ -98,7 +98,7 @@ namespace Buldo.Ngb.Web
             var bot = new GamesBot(botConfig, new BotUsersRepository(() => CreateContext(connectionString)), new BotEnginesRepository(() => CreateContext(connectionString)));
             if (bool.Parse(Configuration["IsPollingEnabled"] ?? bool.FalseString) || string.IsNullOrWhiteSpace(Configuration["HookUrl"]))
             {
-                bot.StartLongPooling();
+                bot.StartLongPoolingAsync().GetAwaiter().GetResult();
             }
             else
             {

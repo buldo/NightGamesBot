@@ -32,9 +32,17 @@
             }
         }
 
-        public void ActivateEngine(EngineInfo engine)
+        public bool TryActivateEngine(EngineInfo engine)
         {
-            ActiveEngine = _factory.CreateEngine(engine);
+            try
+            {
+                ActiveEngine = _factory.CreateEngine(engine);
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
         }
     }
 }

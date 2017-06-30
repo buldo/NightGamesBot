@@ -31,6 +31,11 @@ namespace Buldo.Ngb.Bot.Controllers
                 _router.Unregister(_lastGameControllerType);
             }
 
+            if (_enginesManager.ActiveEngine == null)
+            {
+                return;
+            }
+
             switch (_enginesManager.ActiveEngine.Type)
             {
                 case GameType.RedFoxLine:

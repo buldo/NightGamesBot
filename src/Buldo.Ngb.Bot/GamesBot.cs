@@ -42,7 +42,7 @@
             var defaultEngineInfo = enginesRepository.GetEngines().FirstOrDefault();
             if (defaultEngineInfo != null)
             {
-                _enginesManager.ActivateEngine(defaultEngineInfo);
+                _enginesManager.TryActivateEngine(defaultEngineInfo);
             }
 
             _gameControllersManager = new GameControllersManager(_enginesManager, _router);
@@ -54,8 +54,9 @@
 
 
 
-        public void StartLongPooling()
+        public async Task StartLongPoolingAsync()
         {
+            await _client.SetWebhookAsync();
             _client.OnUpdate += async (sender, args) => await ProcessUpdateAsync(args.Update);
             _client.StartReceiving();
         }
