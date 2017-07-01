@@ -1,5 +1,6 @@
-namespace Buldo.Ngb.FoxApi.Tests
+Ôªønamespace Buldo.Ngb.FoxApi.Tests
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Reflection;
@@ -24,12 +25,12 @@ namespace Buldo.Ngb.FoxApi.Tests
         {
             var expextedMainCodes = new Dictionary<string, int>
             {
-                {"2¿", 3},
-                {"2¬+", 1},
-                {"2¿+", 5},
-                {"1¬", 1},
-                {"1¿", 1},
-                {"1¿+", 1},
+                {"2–ê", 3},
+                {"2–í+", 1},
+                {"2–ê+", 5},
+                {"1–í", 1},
+                {"1–ê", 1},
+                {"1–ê+", 1},
             };
 
 
@@ -49,11 +50,11 @@ namespace Buldo.Ngb.FoxApi.Tests
         [TestMethod]
         public void TestNewTaskWithBonusesParse()
         {
-            var expected = new FoxEngineStatus("–ÓÏ‡",
+            var expected = new FoxEngineStatus("–†–æ–º–∞",
                                                true,
                                                InputResult.None,
                                                string.Empty,
-                                               new Dictionary<string, int> {{"¿+", 5}},
+                                               new Dictionary<string, int> {{"–ê+", 5}},
                                                new Dictionary<string, int> {{"-2", 5}},
                                                new List<AcceptedCode>());
             RealParseText(ExamplesPatches.NewTaskWithBonuses, expected);
@@ -62,11 +63,11 @@ namespace Buldo.Ngb.FoxApi.Tests
         [TestMethod]
         public void TestCodeNotExists()
         {
-            var expected = new FoxEngineStatus("–ÓÏ‡",
+            var expected = new FoxEngineStatus("–†–æ–º–∞",
                                                true,
                                                InputResult.CodeNotExists,
                                                string.Empty,
-                                               new Dictionary<string, int> {{"¿+", 5}},
+                                               new Dictionary<string, int> {{"–ê+", 5}},
                                                new Dictionary<string, int> {{"-2", 5}},
                                                new List<AcceptedCode>());
 
@@ -76,11 +77,11 @@ namespace Buldo.Ngb.FoxApi.Tests
         [TestMethod]
         public void TestCodeAccepted()
         {
-            var expected = new FoxEngineStatus("–ÓÏ‡",
+            var expected = new FoxEngineStatus("–†–æ–º–∞",
                                                true,
                                                InputResult.CodeAccepted,
                                                string.Empty,
-                                               new Dictionary<string, int> {{"¿+", 5}},
+                                               new Dictionary<string, int> {{"–ê+", 5}},
                                                new Dictionary<string, int> {{"-2", 5}},
                                                new List<AcceptedCode>());
 
@@ -90,11 +91,11 @@ namespace Buldo.Ngb.FoxApi.Tests
         [TestMethod]
         public void TestCodeAcceptedWithComment()
         {
-            var expected = new FoxEngineStatus("–ÓÏ‡",
+            var expected = new FoxEngineStatus("–†–æ–º–∞",
                                                true,
                                                InputResult.CodeAccepted,
-                                               "“ÂÍÒÚ  ÓÏÏÂÌÚ‡Ëˇ",
-                                               new Dictionary<string, int> {{"¿+", 5}},
+                                               "–¢–µ–∫—Å—Ç –ö–æ–º–º–µ–Ω—Ç–∞—Ä–∏—è",
+                                               new Dictionary<string, int> {{"–ê+", 5}},
                                                new Dictionary<string, int> {{"-2", 5}},
                                                new List<AcceptedCode>());
 
@@ -104,11 +105,11 @@ namespace Buldo.Ngb.FoxApi.Tests
         [TestMethod]
         public void TestCodeAlreadyAccepted()
         {
-            var expected = new FoxEngineStatus("–ÓÏ‡",
+            var expected = new FoxEngineStatus("–†–æ–º–∞",
                                                true,
                                                InputResult.CodeAlreadyAccepted,
                                                string.Empty,
-                                               new Dictionary<string, int> {{"¿+", 5}},
+                                               new Dictionary<string, int> {{"–ê+", 5}},
                                                new Dictionary<string, int> {{"-2", 5}},
                                                new List<AcceptedCode>());
 
@@ -122,7 +123,7 @@ namespace Buldo.Ngb.FoxApi.Tests
                                                true,
                                                InputResult.WrongSpoiler,
                                                string.Empty,
-                                               new Dictionary<string, int> {{"Œ", 1}},
+                                               new Dictionary<string, int> {{"–û", 1}},
                                                new Dictionary<string, int>(),
                                                new List<AcceptedCode>());
 
