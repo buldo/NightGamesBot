@@ -83,7 +83,11 @@
                                                string.Empty,
                                                new Dictionary<string, int> {{"А+", 5}},
                                                new Dictionary<string, int> {{"-2", 5}},
-                                               new List<AcceptedCode>());
+                                               new List<AcceptedCode>()
+                                               {
+                                                   new AcceptedCode("А+", "4445", string.Empty)
+                                               }
+                                              );
 
             RealParseText(ExamplesPatches.CodeAccepted, expected);
         }
@@ -97,7 +101,11 @@
                                                "Текст Комментария",
                                                new Dictionary<string, int> {{"А+", 5}},
                                                new Dictionary<string, int> {{"-2", 5}},
-                                               new List<AcceptedCode>());
+                                               new List<AcceptedCode>()
+                                               {
+                                                   new AcceptedCode("А+", "4445", string.Empty),
+                                                   new AcceptedCode("А+", "46781", "Текст Комментария"),
+                                               });
 
             RealParseText(ExamplesPatches.CodeAcceptedWithComment, expected);
         }
@@ -111,7 +119,12 @@
                                                string.Empty,
                                                new Dictionary<string, int> {{"А+", 5}},
                                                new Dictionary<string, int> {{"-2", 5}},
-                                               new List<AcceptedCode>());
+                                               new List<AcceptedCode>()
+                                               {
+                                                   new AcceptedCode("А+", "4445", string.Empty),
+                                                   new AcceptedCode("А+", "46781", "Текст Комментария"),
+                                                   new AcceptedCode("А+", "50575", string.Empty),
+                                               });
 
             RealParseText(ExamplesPatches.CodeAlreadyAccepted, expected);
         }

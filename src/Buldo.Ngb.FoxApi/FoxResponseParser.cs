@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using AngleSharp.Dom.Html;
+    using AngleSharp.Extensions;
 
     internal class FoxResponseParser
     {
@@ -16,7 +17,8 @@
                 var mainCodes = ParseCodes("Основные коды", document);
                 var bonusCodes = ParseCodes("Бонусные коды", document);
                 var inputResult = ParseInputResult(document);
-                return new FoxEngineStatus(teamName, true, inputResult.result, inputResult.message, mainCodes, bonusCodes, new List<AcceptedCode>());
+                var acceptedCodes = ParseAcceptedCodes(document);
+                return new FoxEngineStatus(teamName, true, inputResult.result, inputResult.message, mainCodes, bonusCodes, acceptedCodes);
             }
             else
             {
@@ -29,7 +31,7 @@
                                            new List<AcceptedCode>());
             }
         }
-
+        
         private bool ParseIsRunning(IHtmlDocument document)
         {
             return document.GetElementsByTagName("h3").All(e => e.TextContent != "На данный момент нет активных игр");
@@ -99,6 +101,38 @@
         private string GetTeamName(IHtmlDocument document)
         {
             return document.GetElementsByClassName("team_name").FirstOrDefault()?.TextContent ?? string.Empty;
+        }
+
+
+        private IList<AcceptedCode> ParseAcceptedCodes(IHtmlDocument document)
+        {
+            var acceptesCodes = new List<AcceptedCode>();
+
+            var enteredCodesElements = document.GetElementsByClassName("found_codes").FirstOrDefault()?.GetElementsByTagName("li");
+            if (enteredCodesElements == null)
+            {
+                return acceptesCodes;
+            }
+
+            foreach (var element in enteredCodesElements)
+            {
+                var codeClass = element.GetElementsByClassName("class").FirstOrDefault()?.Text();
+                var fullCodeText = element.GetElementsByClassName("code").FirstOrDefault()?.Text();
+                if (!string.IsNullOrWhiteSpace(codeClass) && !string.IsNullOrWhiteSpace(fullCodeText))
+                {
+                    var splited = fullCodeText.Split(new[] {' '}, 2, StringSplitOptions.RemoveEmptyEntries);
+                    if (splited.Length == 1)
+                    {
+                        acceptesCodes.Add(new AcceptedCode(codeClass, splited[0], string.Empty));
+                    }
+                    else if (splited.Length == 2)
+                    {
+                        acceptesCodes.Add(new AcceptedCode(codeClass, splited[0], splited[1]));
+                    }
+                }
+            }
+
+            return acceptesCodes;
         }
     }
 }
