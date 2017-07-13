@@ -16,6 +16,7 @@ namespace Buldo.Ngb.Web.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     Address = table.Column<string>(nullable: true),
+                    GameType = table.Column<int>(nullable: false),
                     Login = table.Column<string>(nullable: true),
                     Name = table.Column<string>(nullable: true),
                     Password = table.Column<string>(nullable: true)
@@ -36,6 +37,18 @@ namespace Buldo.Ngb.Web.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_BotUsers", x => x.TelegramId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Settings",
+                columns: table => new
+                {
+                    Key = table.Column<string>(nullable: false),
+                    Value = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Settings", x => x.Key);
                 });
 
             migrationBuilder.CreateTable(
@@ -213,6 +226,8 @@ namespace Buldo.Ngb.Web.Migrations
                 name: "IX_AspNetUserRoles_RoleId",
                 table: "AspNetUserRoles",
                 column: "RoleId");
+
+            //migrationBuilder.Sql("INSERT INTO [Settings] VALUES ('IsRegistrationEnabled', 'True')");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -222,6 +237,9 @@ namespace Buldo.Ngb.Web.Migrations
 
             migrationBuilder.DropTable(
                 name: "BotUsers");
+
+            migrationBuilder.DropTable(
+                name: "Settings");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");

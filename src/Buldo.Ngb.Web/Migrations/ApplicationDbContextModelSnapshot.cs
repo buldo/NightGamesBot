@@ -15,7 +15,7 @@ namespace Buldo.Ngb.Web.Migrations
         {
             modelBuilder
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
-                .HasAnnotation("ProductVersion", "1.1.1");
+                .HasAnnotation("ProductVersion", "1.1.2");
 
             modelBuilder.Entity("Buldo.Ngb.Bot.EnginesManagement.EngineInfo", b =>
                 {
@@ -47,6 +47,17 @@ namespace Buldo.Ngb.Web.Migrations
                     b.HasKey("TelegramId");
 
                     b.ToTable("BotUsers");
+                });
+
+            modelBuilder.Entity("Buldo.Ngb.Web.Models.ApplicationSetting", b =>
+                {
+                    b.Property<string>("Key");
+
+                    b.Property<string>("Value");
+
+                    b.HasKey("Key");
+
+                    b.ToTable("Settings");
                 });
 
             modelBuilder.Entity("Buldo.Ngb.Web.Models.ApplicationUser", b =>

@@ -11,6 +11,8 @@ namespace Buldo.Ngb.Web.Data
         public DbSet<BotUser> BotUsers { get; set; }
 
         public DbSet<EngineInfo> Engines { get; set; }
+        
+        public DbSet<ApplicationSetting> Settings { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

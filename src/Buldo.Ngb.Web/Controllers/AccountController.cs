@@ -19,6 +19,7 @@ namespace Buldo.Ngb.Web.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly SettingsService _settingsService;
         private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
@@ -26,12 +27,14 @@ namespace Buldo.Ngb.Web.Controllers
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
+            SettingsService settingsService,
             IEmailSender emailSender,
             ISmsSender smsSender,
             ILoggerFactory loggerFactory)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _settingsService = settingsService;
             _emailSender = emailSender;
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
@@ -89,8 +92,13 @@ namespace Buldo.Ngb.Web.Controllers
         // GET: /Account/Register
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult Register(string returnUrl = null)
+        public async Task<IActionResult> Register(string returnUrl = null)
         {
+            if (! await _settingsService.GetIsRegistrationEnabledAsync())
+            {
+                return View("Error");
+            }
+
             ViewData["ReturnUrl"] = returnUrl;
             return View();
         }
@@ -102,6 +110,11 @@ namespace Buldo.Ngb.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
         {
+            if (!await _settingsService.GetIsRegistrationEnabledAsync())
+            {
+                return View("Error");
+            }
+
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
@@ -142,8 +155,13 @@ namespace Buldo.Ngb.Web.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public IActionResult ExternalLogin(string provider, string returnUrl = null)
+        public async Task<IActionResult> ExternalLogin(string provider, string returnUrl = null)
         {
+            if (!await _settingsService.GetIsRegistrationEnabledAsync())
+            {
+                return View("Error");
+            }
+
             // Request a redirect to the external login provider.
             var redirectUrl = Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl });
             var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
@@ -156,6 +174,11 @@ namespace Buldo.Ngb.Web.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> ExternalLoginCallback(string returnUrl = null, string remoteError = null)
         {
+            if (!await _settingsService.GetIsRegistrationEnabledAsync())
+            {
+                return View("Error");
+            }
+
             if (remoteError != null)
             {
                 ModelState.AddModelError(string.Empty, $"Error from external provider: {remoteError}");
@@ -199,6 +222,11 @@ namespace Buldo.Ngb.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ExternalLoginConfirmation(ExternalLoginConfirmationViewModel model, string returnUrl = null)
         {
+            if (!await _settingsService.GetIsRegistrationEnabledAsync())
+            {
+                return View("Error");
+            }
+
             if (ModelState.IsValid)
             {
                 // Get the information about the user from the external login provider

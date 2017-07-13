@@ -95,7 +95,7 @@ namespace Buldo.Ngb.Web
                 Token = Configuration["Token"],
                 AccessKey = Configuration["AccessKey"]
             };
-            var bot = new GamesBot(botConfig, new BotUsersRepository(() => CreateContext(connectionString)), new BotEnginesRepository(() => CreateContext(connectionString)));
+            var bot = new GamesBot(botConfig, new BotUsersRepository(() => CreateAppContext(connectionString)), new BotEnginesRepository(() => CreateAppContext(connectionString)));
             if (bool.Parse(Configuration["IsPollingEnabled"] ?? bool.FalseString) || string.IsNullOrWhiteSpace(Configuration["HookUrl"]))
             {
                 bot.StartLongPoolingAsync().GetAwaiter().GetResult();
@@ -105,6 +105,7 @@ namespace Buldo.Ngb.Web
                 bot.EnableWebHook(Configuration["HookUrl"]);
             }
             services.AddSingleton<IUpdateMessagesProcessor>(bot);
+            services.AddSingleton<SettingsService>(new SettingsService(() => CreateAppContext(connectionString)));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -138,7 +139,7 @@ namespace Buldo.Ngb.Web
             });
         }
 
-        private ApplicationDbContext CreateContext(string connectionString)
+        private ApplicationDbContext CreateAppContext(string connectionString)
         {
             var dbConBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
             dbConBuilder.UseNpgsql(connectionString);

@@ -9,14 +9,14 @@ using Buldo.Ngb.Bot.EnginesManagement;
 namespace Buldo.Ngb.Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20170402184700_GameType")]
-    partial class GameType
+    [Migration("20170701211743_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
-                .HasAnnotation("ProductVersion", "1.1.1");
+                .HasAnnotation("ProductVersion", "1.1.2");
 
             modelBuilder.Entity("Buldo.Ngb.Bot.EnginesManagement.EngineInfo", b =>
                 {
@@ -48,6 +48,17 @@ namespace Buldo.Ngb.Web.Migrations
                     b.HasKey("TelegramId");
 
                     b.ToTable("BotUsers");
+                });
+
+            modelBuilder.Entity("Buldo.Ngb.Web.Models.ApplicationSetting", b =>
+                {
+                    b.Property<string>("Key");
+
+                    b.Property<string>("Value");
+
+                    b.HasKey("Key");
+
+                    b.ToTable("Settings");
                 });
 
             modelBuilder.Entity("Buldo.Ngb.Web.Models.ApplicationUser", b =>
