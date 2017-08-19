@@ -16,6 +16,7 @@ using Buldo.Ngb.Web.Helpers;
 using Buldo.Ngb.Web.Models;
 using Buldo.Ngb.Web.Services;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Identity;
 
 namespace Buldo.Ngb.Web
 {
@@ -127,7 +128,7 @@ namespace Buldo.Ngb.Web
 
             app.UseStaticFiles();
 
-            app.UseIdentity();
+            app.UseAuthentication();
 
             // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
 
