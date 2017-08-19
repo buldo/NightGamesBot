@@ -46,14 +46,9 @@
             _timer.Change(Timeout.Infinite, Timeout.Infinite);
         }
 
-        public async Task ProcessUserInput(string data)
+        public async Task<FoxEngineStatus> ProcessUserInput(string data)
         {
-            if (_lastStatus == null)
-            {
-                var updatedState = await _api.SendCodeAsync(data);
-                
-                await RequestNewStatusAsync();
-            }
+            return await _api.SendCodeAsync(data);
         }
 
         private async void RefreshTimerCallback(object state)

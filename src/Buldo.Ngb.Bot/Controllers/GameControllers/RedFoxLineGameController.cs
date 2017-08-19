@@ -1,8 +1,10 @@
 ﻿namespace Buldo.Ngb.Bot.Controllers.GameControllers
 {
+    using System;
     using System.Threading.Tasks;
     using Engines;
     using EnginesManagement;
+    using FoxApi;
     using Routing;
 
     [Route("")]
@@ -42,9 +44,34 @@
         }
 
         [Route("")]
-        public Task InputDataAsync(string data)
+        public async Task InputDataAsync(string data)
         {
-            return _engine.ProcessUserInput(data);
+            var status = await _engine.ProcessUserInput(data);
+            string message;
+            switch (status.InputResult)
+            {
+                case InputResult.None:
+                    message = "Ничего";
+                    break;
+                case InputResult.CodeAccepted:
+                    message = "Принят";
+                    break;
+                case InputResult.CodeNotExists:
+                    message = "Не существует";
+                    break;
+                case InputResult.CodeAlreadyAccepted:
+                    message = "Уже введён";
+                    break;
+                case InputResult.SpoilerOpened:
+                    message = "Спойлер открыт";
+                    break;
+                case InputResult.WrongSpoiler:
+                    message = "Неверный спойлер";
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+            await ResponseAsync(message);
         }
     }
 }

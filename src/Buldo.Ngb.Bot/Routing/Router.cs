@@ -66,31 +66,37 @@
             }
         }
 
-        public Task ProcessUpdateAsync(Update update, BotUser user)
+        public async Task ProcessUpdateAsync(Update update, BotUser user)
         {
-            switch (update.Type)
+            try
             {
-                case UpdateType.UnknownUpdate:
-                    break;
-                case UpdateType.MessageUpdate:
-                    return ProcessMessageAsync(update, user);
-                case UpdateType.InlineQueryUpdate:
-                    break;
-                case UpdateType.ChosenInlineResultUpdate:
-                    break;
-                case UpdateType.CallbackQueryUpdate:
-                    break;
-                case UpdateType.EditedMessage:
-                    break;
-                case UpdateType.ChannelPost:
-                    break;
-                case UpdateType.EditedChannelPost:
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
+                switch (update.Type)
+                {
+                    case UpdateType.UnknownUpdate:
+                        break;
+                    case UpdateType.MessageUpdate:
+                        await ProcessMessageAsync(update, user);
+                        break;
+                    case UpdateType.InlineQueryUpdate:
+                        break;
+                    case UpdateType.ChosenInlineResultUpdate:
+                        break;
+                    case UpdateType.CallbackQueryUpdate:
+                        break;
+                    case UpdateType.EditedMessage:
+                        break;
+                    case UpdateType.ChannelPost:
+                        break;
+                    case UpdateType.EditedChannelPost:
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
             }
-
-            return Task.CompletedTask;
+            catch (Exception ex)
+            {
+                await _telegramClient.SendTextMessageAsync(update.Message.Chat.Id, ex.Message);
+            }
         }
 
         private async Task ProcessMessageAsync(Update update, BotUser user)
