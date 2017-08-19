@@ -9,10 +9,4 @@
     <PackageReference Include="JetBrains.Annotations" Version="11.0.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="AngleSharp">
-      <HintPath>..\..\..\..\..\.nuget\packages\anglesharp\0.9.9\lib\netstandard1.0\AngleSharp.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
 </Project>
