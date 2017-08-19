@@ -1,6 +1,7 @@
 ﻿namespace Buldo.Ngb.Bot.Engines
 {
     using System;
+    using System.ComponentModel.DataAnnotations;
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
@@ -50,6 +51,8 @@
         {
             if (_lastStatus == null)
             {
+                var updatedState = await _api.SendCodeAsync(data);
+                
                 await RequestNewStatusAsync();
             }
         }
