@@ -1,0 +1,62 @@
+﻿@using Buldo.Ngb.Web.Models.EnginesViewModels
+@using Microsoft.AspNetCore.Mvc.Routing
+@model EnginesListViewModel
+@{
+    ViewData["Title"] = "Управление движками";
+}
+
+<h2>@ViewData["Title"].</h2>
+<p class="text-success">@ViewData["StatusMessage"]</p>
+
+<div>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Название</th>
+                <th>Действия</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var engine in @ViewData.Model.Engines)
+            {
+                <tr>
+                    <td>@engine.Name</td>
+                    <td>
+                        @using (Html.BeginForm("Delete", "Engines", new { id = engine.Id }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <input type="submit" value="Delete" class="btn btn-default" />
+                        }
+                    </td>
+                </tr>
+            }  
+            </tbody>
+        </table>
+    </div>
+    <div class="container">
+        <div class="row">
+            @using (Html.BeginForm("Add", "Engines", FormMethod.Post, new {@class = "form-inline", @role="form"}))
+            {
+                @Html.AntiForgeryToken()
+                <div class="form-group">
+                    <label class="sr-only" for="name">Имя</label>
+                    <input type="text" class="form-control" id="name" name="name" placeholder="Имя">
+                </div>
+                <div class="form-group">
+                    <label class="sr-only" for="address">Адрес движка</label>
+                    <input type="text" class="form-control" id="address" name="address" placeholder="tomsk.redfoxkrsk.ru">
+                </div>
+                <div class="form-group">
+                    <label class="sr-only" for="login">Логин</label>
+                    <input type="text" class="form-control" id="login" name="login" placeholder="Логин">
+                </div>
+                <div class="form-group">
+                    <label class="sr-only" for="password">Пароль</label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Пароль">
+                </div>
+                <button type="submit" class="btn btn-default">Добавить</button>
+            }
+         </div>
+    </div>
+</div>

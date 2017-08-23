@@ -1,0 +1,153 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0031)http://tomsk.redfoxkrsk.ru/play -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>63FX: 23 + 8 - 2. Винтик. - Игровой кабинет - RedFox Quest Томск</title>
+<meta name="description" content="">
+<meta name="keywords" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+   
+</head>
+
+<body>
+<p class="alert"><a href="http://tomsk.redfoxkrsk.ru/play/message/1488641064">Код для старта - ПРАЗДНИКИ</a></p>
+    <p class="team_name">SG-1</p>
+    
+    <h1>63FX: 23 + 8</h1>
+    
+    <p class="timer"><span id="timer">20:24:25</span></p>
+    
+    <h2>2. Винтик.</h2>
+        
+    <!-- insert here -->
+        <p id="message" class="clearfix success">Код принят! Spoiler alert! ↓</p>
+        
+        <form class="enter" action="http://tomsk.redfoxkrsk.ru/play/submit/" method="post">
+        <p>
+            <strong>Ввести код</strong>
+            <input type="text" class="input" id="code" name="code" value="" autocomplete="off">
+            <input type="submit" value="Отправить" class="btn_submit">
+        </p>
+    </form>
+        
+        
+        
+    <p class="task_text">
+        </p><p><span>- Дорогой, я прибралась у тебя в ящике с инструментами. Нашла там всякие винтики.</span></p><br>
+<p><span><img style="margin: 0px;" src="./63FX_ 23 + 8 - 2. Винтик. - Игровой кабинет - RedFox Quest Томск_files/vintik.png" alt="" width="250" height="198"></span></p><br>
+<p><span>Ф.О.: СЛОВО.</span></p>    <p></p>
+    
+        <div class="spoiler">
+    
+                
+            <p><img style="margin: 0px;" src="./63FX_ 23 + 8 - 2. Винтик. - Игровой кабинет - RedFox Quest Томск_files/mrSakko.png" alt="" width="243" height="176"></p>
+<p><em><strong>Примечание:&nbsp;</strong>Заигран деревянный заброшенный дом.</em></p>        
+                
+    </div>
+    <div class="clear"></div>
+        
+    
+    <p class="level_time">
+                <strong>Осталось:</strong> <span id="time_left">00:58:14</span>
+        <br><strong>До подсказки 1:</strong> <span id="time_hint1">00:18:14</span>
+        <br><strong>До подсказки 2:</strong> <span id="time_hint2">00:38:14</span>
+    </p>
+        
+        <p class="codes_class"><strong>Коды на локации:</strong> 
+        </p><p><strong>Основные коды</strong>: A+, B+, B+, A, A, A, A, A+, A</p>    <p></p>
+        
+    <ul class="hints">
+            </ul>
+    
+        
+        <form action="http://tomsk.redfoxkrsk.ru/play/forfeit/" method="post"><input id="btn_forfeit" type="submit" value=" Слить оставшиеся коды "></form>
+        
+    
+    
+<script type="text/javascript" language="Javascript">
+
+var time_spent = 102000;
+var time_left  = 3498000;
+var time_started = 1488641064000 - time_spent;
+var time_reloaded = 1488641064000 - time_started;
+var hint1 = 60 * 20 * 1000;
+var hint2 = 60 * 40 * 1000;
+var reload_url = "http://tomsk.redfoxkrsk.ru/play/get_back/";
+
+window.onload = function(){
+    timer();
+    level_time();
+    document.getElementById('code').focus();
+}
+function timer() {
+    var time = new Date();
+    document.getElementById('timer').innerHTML = time.toLocaleTimeString();
+    setTimeout('timer()', 1000);
+}
+
+function level_time() {
+    // document.getElementById('time_spent').innerHTML = make_time(time_spent);
+    document.getElementById('time_left').innerHTML = make_time(time_left);
+    if((hint1 - time_spent) > 0) {
+        document.getElementById('time_hint1').innerHTML = make_time(hint1 - time_spent);
+    } else {
+        document.getElementById('time_hint1').innerHTML = 'выдана';
+    }
+        
+    if((hint2 - time_spent) > 0) {
+        document.getElementById('time_hint2').innerHTML = make_time(hint2 - time_spent);
+    } else {
+        document.getElementById('time_hint2').innerHTML = 'выдана';
+    }
+    time_spent += 1000;
+    time_left -= 1000;
+    setTimeout('level_time()', 1000);
+    
+    if(time_spent > 3600000) {
+        document.location = reload_url;
+    }
+    
+    if(time_spent > hint1 && time_reloaded < hint1) {
+        document.location = reload_url;
+    }
+    
+    if(time_spent > hint2 && time_reloaded < hint2) {
+        document.location = reload_url;
+    }
+}
+
+function make_time(time)
+{
+    var time = new Date(time);
+    
+    
+    var days = time.getUTCDate();
+    days--;
+    
+    var hours = time.getUTCHours();
+    if (hours < 10) { 
+        hours = "0" + hours; 
+    }
+    var mins = time.getUTCMinutes();
+    if (mins < 10) { 
+        mins = "0" + mins; 
+    }
+    var seconds = time.getUTCSeconds();
+    if (seconds < 10) { 
+        seconds = "0" + seconds; 
+    }
+    var str = hours + ":" + mins + ":" + seconds;
+    
+    if (days)
+    {
+        str = days + " д. " + str;
+    }
+    return str;
+}
+
+</script>
+
+
+
+</body></html>
