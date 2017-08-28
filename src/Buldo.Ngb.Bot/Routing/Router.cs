@@ -134,6 +134,21 @@
                     continue;
                 }
 
+                if (parameter.ParameterType == typeof(int))
+                {
+                    var intText = text?.Remove(0, route.Path.Length);
+                    if (int.TryParse(intText, out var value))
+                    {
+                        invoceParams.Add(value);
+                    }
+                    else
+                    {
+                        invoceParams.Add(default(int));
+                    }
+                    
+                    continue;
+                }
+
                 if (parameter.ParameterType == typeof(Message))
                 {
                     invoceParams.Add(message);
