@@ -29,17 +29,18 @@
             }
         }
 
-        [Route("set interval")]
-        [Route("автообновление")]
-        public void SetAutoRefresh(int interval)
+        [Route("interval")]
+        public async Task SetAutoRefresh(int interval)
         {
             if (interval > 0)
             {
                 _engine.SetAutoRefreshInterval(interval);
+                await ResponseAsync($"Автообновление с периодом {interval} секунд");
             }
             else
             {
                 _engine.DisableAutoRefresh();
+                await ResponseAsync($"Автообновление отключено");
             }
         }
 
