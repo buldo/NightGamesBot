@@ -18,7 +18,8 @@
                 var bonusCodes = ParseCodes("Бонусные коды", document);
                 var inputResult = ParseInputResult(document);
                 var acceptedCodes = ParseAcceptedCodes(document);
-                return new FoxEngineStatus(teamName, true, inputResult.result, inputResult.message, mainCodes, bonusCodes, acceptedCodes);
+                var taskName = ParseTaskName(document);
+                return new FoxEngineStatus(teamName, true, inputResult.result, taskName, inputResult.message, mainCodes, bonusCodes, acceptedCodes);
             }
             else
             {
@@ -26,12 +27,18 @@
                                            false,
                                            InputResult.None,
                                            string.Empty,
+                                           string.Empty,
                                            new Dictionary<string, int>(),
                                            new Dictionary<string, int>(),
                                            new List<AcceptedCode>());
             }
         }
-        
+
+        private string ParseTaskName(IHtmlDocument document)
+        {
+            return document.GetElementsByTagName("h2").ToString();
+        }
+
         private bool ParseIsRunning(IHtmlDocument document)
         {
             return document.GetElementsByTagName("h3").All(e => e.TextContent != "На данный момент нет активных игр");

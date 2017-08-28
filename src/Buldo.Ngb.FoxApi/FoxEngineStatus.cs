@@ -11,6 +11,7 @@
         public FoxEngineStatus([NotNull] string teamName,
                                bool isGameRunning,
                                InputResult inputResult,
+                               [NotNull] string taskName,
                                [NotNull] string message,
                                [NotNull] IDictionary<string, int> mainCodes,
                                [NotNull] IDictionary<string, int> bonusCodes,
@@ -18,6 +19,7 @@
         {
             TeamName = teamName;
             InputResult = inputResult;
+            TaskName = taskName;
             Message = message;
             IsGameRunning = isGameRunning;
             AcceptedCodes = new ReadOnlyCollection<AcceptedCode>(acceptedCodes);
@@ -32,6 +34,8 @@
         public InputResult InputResult { get; }
 
         public string Message { get; }
+
+        public string TaskName { get; }
 
         public IReadOnlyDictionary<string, int> MainCodes { get; }
 
