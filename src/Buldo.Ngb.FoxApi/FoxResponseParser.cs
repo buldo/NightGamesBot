@@ -36,7 +36,7 @@
 
         private string ParseTaskName(IHtmlDocument document)
         {
-            return document.GetElementsByTagName("h2").ToString();
+            return document.GetElementsByTagName("h2").FirstOrDefault()?.TextContent ?? "Нет названия";
         }
 
         private bool ParseIsRunning(IHtmlDocument document)

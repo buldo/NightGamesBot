@@ -1,6 +1,7 @@
 ﻿namespace Buldo.Ngb.Bot.Engines
 {
     using System;
+    using System.Linq;
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
@@ -93,23 +94,36 @@
                 return builder.ToString();
             }
 
-            if (string.IsNullOrWhiteSpace(status.Message))
+            if (!string.IsNullOrWhiteSpace(status.Message))
             {
                 builder.AppendLine(status.Message);
             }
 
-            if (status.MainCodes.Count > 0)
+            if (!string.IsNullOrWhiteSpace(status.TaskName))
             {
-                builder.AppendLine("Основные коды");
-                foreach (var code in status.MainCodes)
-                {
-                    builder.AppendLine($"{code.Key}: {code.Value}");
-                }
-                builder.AppendLine();
+                builder.AppendLine(status.TaskName);
             }
+
+            var groupedAcceptedCodes = status.AcceptedCodes.GroupBy(c => c.Type).ToDictionary(g => g.Key);
 
             if (status.MainCodes.Count > 0)
             {
+                builder.AppendLine("Основные коды");
+                foreach (var code in status.MainCodes.OrderBy(c => c.Key, StringComparer.InvariantCultureIgnoreCase))
+                {
+                    var acceptedCodesCnt = 0;
+                    if (groupedAcceptedCodes.TryGetValue(code.Key, out var acceptedCodes))
+                    {
+                        acceptedCodesCnt = acceptedCodes.Count();
+                    }
+                    
+                    builder.AppendLine($"{code.Key}: {acceptedCodesCnt}/{code.Value}");
+                }
+            }
+
+            if (status.BonusCodes.Count > 0)
+            {
+                builder.AppendLine();
                 builder.AppendLine("Бонусные коды");
                 foreach (var code in status.BonusCodes)
                 {

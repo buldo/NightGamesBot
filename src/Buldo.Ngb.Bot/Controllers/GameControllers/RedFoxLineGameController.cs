@@ -55,7 +55,7 @@
                     message = "Ничего";
                     break;
                 case InputResult.CodeAccepted:
-                    message = "Принят";
+                    message = $"Принят {status.Message}";
                     break;
                 case InputResult.CodeNotExists:
                     message = "Не существует";

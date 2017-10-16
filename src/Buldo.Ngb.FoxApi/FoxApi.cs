@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading.Tasks;
     using AngleSharp.Parser.Html;
 
@@ -24,6 +25,7 @@
             {
                 BaseAddress = new Uri(baseUrl)
             };
+            _httpClient.DefaultRequestHeaders.Add("User-Agent", "Buldo NGB");
             _authenticator = new Authenticator(_httpClient);
         }
 
