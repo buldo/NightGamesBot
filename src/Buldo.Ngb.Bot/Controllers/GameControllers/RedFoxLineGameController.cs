@@ -55,7 +55,8 @@
                     message = "Ничего";
                     break;
                 case InputResult.CodeAccepted:
-                    message = $"Принят {status.Message}";
+                    var codeType = status.AcceptedCodesWithMessages.FirstOrDefault(c => c.Value == data)?.Type ?? string.Empty;
+                    message = $"Принят {codeType} {status.Message}";
                     break;
                 case InputResult.CodeNotExists:
                     message = "Не существует";
