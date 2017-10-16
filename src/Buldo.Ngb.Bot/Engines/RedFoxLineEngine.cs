@@ -26,14 +26,12 @@
 
         public override GameType Type => GameType.RedFoxLine;
 
-        public async Task<string> GetStatus()
+        public async Task<(FoxEngineStatus OldStatus, FoxEngineStatus NewStatus)> GetStatus()
         {
-            if (!await RequestNewStatusAsync())
-            {
-                return PrepareMessage(_lastStatus);
-            }
-
-            return null;
+            var newStatus = await _api.GetStatusAsync();
+            var retValue = (_lastStatus, newStatus);
+            ProcessStatusInfo(newStatus);
+            return retValue;
         }
 
         public void SetAutoRefreshInterval(int interval)
@@ -47,9 +45,12 @@
             _timer.Change(Timeout.Infinite, Timeout.Infinite);
         }
 
-        public async Task<FoxEngineStatus> ProcessUserInput(string data)
+        public async Task<(FoxEngineStatus OldStatus, FoxEngineStatus NewStatus)> ProcessUserInput(string data)
         {
-            return await _api.SendCodeAsync(data);
+            var newStatus = await _api.SendCodeAsync(data);
+            var retValue = (_lastStatus, newStatus);
+            ProcessStatusInfo(newStatus);
+            return retValue;
         }
 
         private async void RefreshTimerCallback(object state)
@@ -81,71 +82,6 @@
                     await _broadcastSender.SendBroadcastMessageAsync($"Новое задание {currentStatus.TaskName}");
                 }
             }
-        }
-
-        private string PrepareMessage(FoxEngineStatus status)
-        {
-            var builder = new StringBuilder();
-
-            if (!status.IsGameRunning)
-            {
-                builder.AppendLine(status.TeamName);
-                builder.AppendLine("Игра не запущена");
-                return builder.ToString();
-            }
-
-            if (!string.IsNullOrWhiteSpace(status.Message))
-            {
-                builder.AppendLine(status.Message);
-            }
-
-            if (!string.IsNullOrWhiteSpace(status.TaskName))
-            {
-                builder.AppendLine(status.TaskName);
-            }
-
-            var groupedAcceptedCodes = status.AcceptedCodes.GroupBy(c => c.Type).ToDictionary(g => g.Key);
-
-            if (status.MainCodes.Count > 0)
-            {
-                builder.AppendLine("Основные коды");
-                foreach (var code in status.MainCodes.OrderBy(c => c.Key, StringComparer.InvariantCultureIgnoreCase))
-                {
-                    var acceptedCodesCnt = 0;
-                    if (groupedAcceptedCodes.TryGetValue(code.Key, out var acceptedCodes))
-                    {
-                        acceptedCodesCnt = acceptedCodes.Count();
-                    }
-                    
-                    builder.AppendLine($"{code.Key}: {acceptedCodesCnt}/{code.Value}");
-                }
-            }
-
-            if (status.BonusCodes.Count > 0)
-            {
-                builder.AppendLine();
-                builder.AppendLine("Бонусные коды");
-                foreach (var code in status.BonusCodes)
-                {
-                    builder.AppendLine($"{code.Key}: {code.Value}");
-                }
-                builder.AppendLine();
-            }
-
-            return builder.ToString();
-        }
-
-        private async Task<bool> RequestNewStatusAsync()
-        {
-            var newStatus = await _api.GetStatusAsync();
-            if (_lastStatus != newStatus)
-            {
-                _lastStatus = newStatus;
-                await _broadcastSender.SendBroadcastMessageAsync(PrepareMessage(_lastStatus));
-                return true;
-            }
-
-            return false;
         }
     }
 }

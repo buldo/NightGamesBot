@@ -15,14 +15,18 @@
                                [NotNull] string message,
                                [NotNull] IDictionary<string, int> mainCodes,
                                [NotNull] IDictionary<string, int> bonusCodes,
-                               [NotNull] IList<AcceptedCode> acceptedCodes)
+                               [NotNull] IList<AcceptedCode> acceptedCodesWithMessages,
+                               [NotNull] IList<AcceptedCode> acceptedMainCodes,
+                               [NotNull] IList<AcceptedCode> acceptedBonusCodes)
         {
             TeamName = teamName;
             InputResult = inputResult;
             TaskName = taskName;
             Message = message;
+            AcceptedCodesWithMessages = acceptedCodesWithMessages;
+            AcceptedBonusCodes = acceptedBonusCodes;
             IsGameRunning = isGameRunning;
-            AcceptedCodes = new ReadOnlyCollection<AcceptedCode>(acceptedCodes);
+            AcceptedMainCodes = new ReadOnlyCollection<AcceptedCode>(acceptedMainCodes);
             BonusCodes = new ReadOnlyDictionary<string, int>(bonusCodes);
             MainCodes = new ReadOnlyDictionary<string, int>(mainCodes);
         }
@@ -35,13 +39,19 @@
 
         public string Message { get; }
 
+        [NotNull]
+        public IList<AcceptedCode> AcceptedCodesWithMessages { get; }
+
+        [NotNull]
+        public IList<AcceptedCode> AcceptedBonusCodes { get; }
+
         public string TaskName { get; }
 
         public IReadOnlyDictionary<string, int> MainCodes { get; }
 
         public IReadOnlyDictionary<string, int> BonusCodes { get; }
 
-        public IReadOnlyList<AcceptedCode> AcceptedCodes { get; }
+        public IReadOnlyList<AcceptedCode> AcceptedMainCodes { get; }
 
         public bool Equals(FoxEngineStatus other)
         {
@@ -52,7 +62,7 @@
                    string.Equals(Message, other.Message) &&
                    CompareDictionaries(MainCodes, other.MainCodes) &&
                    CompareDictionaries(BonusCodes, other.BonusCodes) &&
-                   CompareCodes(AcceptedCodes, other.AcceptedCodes);
+                   CompareCodes(AcceptedMainCodes, other.AcceptedMainCodes);
         }
 
         public override bool Equals(object obj)
@@ -72,7 +82,7 @@
                 hashCode = (hashCode * 397) ^ (Message != null ? Message.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ (MainCodes != null ? MainCodes.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ (BonusCodes != null ? BonusCodes.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ (AcceptedCodes != null ? AcceptedCodes.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (AcceptedMainCodes != null ? AcceptedMainCodes.GetHashCode() : 0);
                 return hashCode;
             }
         }
