@@ -7,6 +7,7 @@
         CodeNotExists,
         CodeAlreadyAccepted,
         SpoilerOpened,
-        WrongSpoiler
+        WrongSpoiler,
+        NewLevel
     }
 }

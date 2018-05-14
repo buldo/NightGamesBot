@@ -41,7 +41,10 @@
                                                string.Empty,
                                                expextedMainCodes,
                                                new Dictionary<string, int>(),
-                                               new List<AcceptedCode>());
+                                               new List<AcceptedCode>(),
+                                               new List<AcceptedCode>(),
+                                               new List<AcceptedCode>()
+                                               );
 
 
 
@@ -58,7 +61,10 @@
                                                string.Empty,
                                                new Dictionary<string, int> {{"А+", 5}},
                                                new Dictionary<string, int> {{"-2", 5}},
-                                               new List<AcceptedCode>());
+                                               new List<AcceptedCode>(),
+                                               new List<AcceptedCode>(),
+                                               new List<AcceptedCode>()
+                                               );
             RealParseText(ExamplesPatches.NewTaskWithBonuses, expected);
         }
 
@@ -72,7 +78,10 @@
                                                string.Empty,
                                                new Dictionary<string, int> {{"А+", 5}},
                                                new Dictionary<string, int> {{"-2", 5}},
-                                               new List<AcceptedCode>());
+                                               new List<AcceptedCode>(),
+                                               new List<AcceptedCode>(),
+                                               new List<AcceptedCode>()
+                                               );
 
             RealParseText(ExamplesPatches.CodeNotExists, expected);
         }
@@ -90,7 +99,9 @@
                                                new List<AcceptedCode>()
                                                {
                                                    new AcceptedCode("А+", "4445", string.Empty)
-                                               }
+                                               },
+                                               new List<AcceptedCode>(),
+                                               new List<AcceptedCode>()
                                               );
 
             RealParseText(ExamplesPatches.CodeAccepted, expected);
@@ -110,7 +121,9 @@
                                                {
                                                    new AcceptedCode("А+", "4445", string.Empty),
                                                    new AcceptedCode("А+", "46781", "Текст Комментария"),
-                                               });
+                                               },
+                                               new List<AcceptedCode>(),
+                                               new List<AcceptedCode>());
 
             RealParseText(ExamplesPatches.CodeAcceptedWithComment, expected);
         }
@@ -130,7 +143,9 @@
                                                    new AcceptedCode("А+", "4445", string.Empty),
                                                    new AcceptedCode("А+", "46781", "Текст Комментария"),
                                                    new AcceptedCode("А+", "50575", string.Empty),
-                                               });
+                                               },
+                                               new List<AcceptedCode>(),
+                                               new List<AcceptedCode>());
 
             RealParseText(ExamplesPatches.CodeAlreadyAccepted, expected);
         }
@@ -145,6 +160,8 @@
                                                string.Empty,
                                                new Dictionary<string, int> {{"О", 1}},
                                                new Dictionary<string, int>(),
+                                               new List<AcceptedCode>(),
+                                               new List<AcceptedCode>(),
                                                new List<AcceptedCode>());
 
             RealParseText(ExamplesPatches.WrongSpoiler, expected);
@@ -165,6 +182,8 @@
                                                    {"B+", 2}
                                                },
                                                new Dictionary<string, int>(),
+                                               new List<AcceptedCode>(),
+                                               new List<AcceptedCode>(),
                                                new List<AcceptedCode>());
 
             RealParseText(ExamplesPatches.GoodSpoiler, expected);

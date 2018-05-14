@@ -1,5 +1,8 @@
 ﻿namespace Buldo.Ngb.Bot.EnginesManagement
 {
+    using System.Diagnostics;
+
+    [DebuggerDisplay("{GameType} {Name} {Login}")]
     public class EngineInfo
     {
         public int Id { get; set; }

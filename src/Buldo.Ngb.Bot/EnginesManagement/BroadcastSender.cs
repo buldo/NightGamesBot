@@ -1,5 +1,6 @@
 ﻿namespace Buldo.Ngb.Bot.EnginesManagement
 {
+    using System;
     using System.Threading.Tasks;
     using Telegram.Bot;
     using UsersManagement;
@@ -17,10 +18,17 @@
 
         public async Task SendBroadcastMessageAsync(string message)
         {
-            var users = _usersRepository.GetAllUsers();
+            var users = await _usersRepository.GetActiveUsersAsync();
             foreach (var botUser in users)
             {
-                await _client.SendTextMessageAsync(botUser.TelegramId, message);
+                try
+                {
+                    await _client.SendTextMessageAsync(botUser.TelegramId, message);
+                }
+                catch (Exception e)
+                {
+                    await _usersRepository.DisableUserAsync(botUser);
+                }
             }
         }
     }

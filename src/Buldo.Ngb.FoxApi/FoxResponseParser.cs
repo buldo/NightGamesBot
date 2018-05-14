@@ -17,9 +17,20 @@
                 var mainCodes = ParseCodes("Основные коды", document);
                 var bonusCodes = ParseCodes("Бонусные коды", document);
                 var inputResult = ParseInputResult(document);
-                var acceptedCodes = ParseAcceptedCodes(document);
+                var acceptedCodesWithMessages = ParseAcceptedCodesWithMessages(document);
+                var mainAcceptedCodes = ParseAcceptedCodes(document, "Основные коды");
+                var bonusAcceptedCodes = ParseAcceptedCodes(document, "Бонусные коды");
                 var taskName = ParseTaskName(document);
-                return new FoxEngineStatus(teamName, true, inputResult.result, taskName, inputResult.message, mainCodes, bonusCodes, acceptedCodes);
+                return new FoxEngineStatus(teamName,
+                                           true,
+                                           inputResult.result,
+                                           taskName,
+                                           inputResult.message,
+                                           mainCodes,
+                                           bonusCodes,
+                                           acceptedCodesWithMessages,
+                                           mainAcceptedCodes,
+                                           bonusAcceptedCodes);
             }
             else
             {
@@ -30,13 +41,16 @@
                                            string.Empty,
                                            new Dictionary<string, int>(),
                                            new Dictionary<string, int>(),
-                                           new List<AcceptedCode>());
+                                           new List<AcceptedCode>(),
+                                           new List<AcceptedCode>(),
+                                           new List<AcceptedCode>()
+                                           );
             }
         }
 
         private string ParseTaskName(IHtmlDocument document)
         {
-            return document.GetElementsByTagName("h2").ToString();
+            return document.GetElementsByTagName("h2").FirstOrDefault()?.TextContent ?? "Нет названия";
         }
 
         private bool ParseIsRunning(IHtmlDocument document)
@@ -78,6 +92,11 @@
                 return (InputResult.WrongSpoiler, string.Empty);
             }
 
+            if (lowMessage.StartsWith("добро пожаловать на новый уровень!"))
+            {
+                return (InputResult.NewLevel, string.Empty);
+            }
+            
             return (InputResult.None, string.Empty);
         }
 
@@ -111,7 +130,7 @@
         }
 
 
-        private IList<AcceptedCode> ParseAcceptedCodes(IHtmlDocument document)
+        private IList<AcceptedCode> ParseAcceptedCodesWithMessages(IHtmlDocument document)
         {
             var acceptesCodes = new List<AcceptedCode>();
 
@@ -137,6 +156,27 @@
                         acceptesCodes.Add(new AcceptedCode(codeClass, splited[0], splited[1]));
                     }
                 }
+            }
+
+            return acceptesCodes;
+        }
+
+        private IList<AcceptedCode> ParseAcceptedCodes(IHtmlDocument document, string selector)
+        {
+            var acceptesCodes = new List<AcceptedCode>();
+
+            var foundElement = document.
+                GetElementsByTagName("strong")?.
+                FirstOrDefault(el => el.TextContent == selector)?.ParentElement;
+
+            if (foundElement == null)
+            {
+                return acceptesCodes;
+            }
+
+            foreach (var element in foundElement.GetElementsByClassName("found"))
+            {
+                acceptesCodes.Add(new AcceptedCode(element.TextContent, string.Empty, string.Empty));
             }
 
             return acceptesCodes;

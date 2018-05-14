@@ -1,6 +1,8 @@
 ﻿namespace Buldo.Ngb.Bot.Controllers.GameControllers
 {
     using System;
+    using System.Linq;
+    using System.Text;
     using System.Threading.Tasks;
     using Engines;
     using EnginesManagement;
@@ -23,10 +25,7 @@
         public async Task GetStatus()
         {
             var status = await _engine.GetStatus();
-            if (status != null)
-            {
-                await ResponseAsync(status);
-            }
+            await ResponseAsync(PrepareMessage(status.NewStatus));
         }
 
         [Route("interval")]
@@ -47,7 +46,8 @@
         [Route("")]
         public async Task InputDataAsync(string data)
         {
-            var status = await _engine.ProcessUserInput(data);
+            var statuses = await _engine.ProcessUserInput(data);
+            var status = statuses.NewStatus;
             string message;
             switch (status.InputResult)
             {
@@ -55,7 +55,8 @@
                     message = "Ничего";
                     break;
                 case InputResult.CodeAccepted:
-                    message = "Принят";
+                    var codeType = status.AcceptedCodesWithMessages.FirstOrDefault(c => c.Value == data)?.Type ?? string.Empty;
+                    message = $"Принят {codeType} {status.Message}";
                     break;
                 case InputResult.CodeNotExists:
                     message = "Не существует";
@@ -69,10 +70,71 @@
                 case InputResult.WrongSpoiler:
                     message = "Неверный спойлер";
                     break;
+                case InputResult.NewLevel:
+                    message = "Новый уровень";
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
             await ResponseAsync(message);
+        }
+
+        private string PrepareMessage(FoxEngineStatus status)
+        {
+            var builder = new StringBuilder();
+
+            if (!status.IsGameRunning)
+            {
+                builder.AppendLine(status.TeamName);
+                builder.AppendLine("Игра не запущена");
+                return builder.ToString();
+            }
+
+            if (!string.IsNullOrWhiteSpace(status.Message))
+            {
+                builder.AppendLine(status.Message);
+            }
+
+            if (!string.IsNullOrWhiteSpace(status.TaskName))
+            {
+                builder.AppendLine(status.TaskName);
+            }
+
+            if (status.MainCodes.Count > 0)
+            {
+                var acceptedCodesDic = status.AcceptedMainCodes.GroupBy(c => c.Type).ToDictionary(g => g.Key);
+                builder.AppendLine("Основные коды");
+                foreach (var code in status.MainCodes.OrderBy(c => c.Key, StringComparer.InvariantCultureIgnoreCase))
+                {
+                    var acceptedCodesCnt = 0;
+                    if (acceptedCodesDic.TryGetValue(code.Key, out var acceptedCodes))
+                    {
+                        acceptedCodesCnt = acceptedCodes.Count();
+                    }
+
+                    builder.AppendLine($"{code.Key}: {acceptedCodesCnt}/{code.Value}");
+                }
+            }
+
+            if (status.BonusCodes.Count > 0)
+            {
+                var acceptedCodesDic = status.AcceptedBonusCodes.GroupBy(c => c.Type).ToDictionary(g => g.Key);
+                builder.AppendLine();
+                builder.AppendLine("Бонусные коды");
+                foreach (var code in status.BonusCodes)
+                {
+                    var acceptedCodesCnt = 0;
+                    if (acceptedCodesDic.TryGetValue(code.Key, out var acceptedCodes))
+                    {
+                        acceptedCodesCnt = acceptedCodes.Count();
+                    }
+
+                    builder.AppendLine($"{code.Key}: {acceptedCodesCnt}/{code.Value}");
+                }
+                builder.AppendLine();
+            }
+
+            return builder.ToString();
         }
     }
 }
